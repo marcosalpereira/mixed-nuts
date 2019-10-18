@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { Order } from 'src/app/shared/model/order.model';
 
 @Component({
   selector: 'app-order',
@@ -7,6 +8,7 @@ import { AuthService } from 'src/app/shared/services/auth.service';
   styleUrls: ['./order.component.css']
 })
 export class OrderComponent implements OnInit {
+  order: Order;
 
   constructor(public authService: AuthService) {}
 
