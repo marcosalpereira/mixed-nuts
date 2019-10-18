@@ -1,0 +1,39 @@
+
+<img src="assets/nuts.jpeg" alt="Nuts Logo">
+
+<div *ngIf="authService.userData as user; loggin">
+    <h1>{{(user.displayName) ? user.displayName : 'User'}}</h1>
+</div>
+
+<p>Previsão: 21 de Outubro</p>
+<form #form="ngForm" (ngSubmit)="onSubmit()">
+    <button type="submit">Quero</button>
+</form>
+
+<!-- Sidebar navigation -->
+<div class="container-fluid">
+    <div class="row">
+        <nav class="col-md-2 d-md-block bg-light sidebar">
+
+            <ul class="nav flex-column">
+                <!-- Calling SignOut() Api from AuthService -->
+                <li class="nav-item">
+                    <a class="nav-link" (click)="authService.SignOut()">
+                        <i class="fas fa-sign-out-alt"></i>Log out
+                    </a>
+                </li>
+            </ul>
+
+        </nav>
+
+        <!-- Main content -->
+        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+            <div class="inner-adjust">
+                <div class="pt-3 pb-2 mb-3 border-bottom">
+                    <h1 class="h2">User Profile</h1>
+                </div>
+                <!-- Show user data when logged in -->
+            </div>
+        </main>
+    </div>
+</div>

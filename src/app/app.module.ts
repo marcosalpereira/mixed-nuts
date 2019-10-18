@@ -8,23 +8,21 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { OrderComponent } from './components/order/order.component';
 import { SignInComponent } from './components/sign-in/sign-in.component';
 import { SignUpComponent } from './components/sign-up/sign-up.component';
-import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
-import { VerifyEmailComponent } from './components/verify-email/verify-email.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
     AppComponent,
-    DashboardComponent,
+    OrderComponent,
     SignInComponent,
     SignUpComponent,
-    ForgotPasswordComponent,
-    VerifyEmailComponent,
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,

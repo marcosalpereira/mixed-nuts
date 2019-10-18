@@ -2,15 +2,18 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/shared/services/auth.service';
 
 @Component({
-  selector: 'app-dashboard',
-  templateUrl: './dashboard.component.html',
-  styleUrls: ['./dashboard.component.css']
+  selector: 'app-order',
+  templateUrl: './order.component.html',
+  styleUrls: ['./order.component.css']
 })
-export class DashboardComponent implements OnInit {
+export class OrderComponent implements OnInit {
 
   constructor(public authService: AuthService) {}
 
   ngOnInit() {
+  }
+
+  onSubmit() {
   }
 
 }
