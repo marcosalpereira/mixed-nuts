@@ -1,7 +1,12 @@
 <div class="bg"></div>
 <div class="content" *ngIf="authService.userData as user; else loggin">
-    <h1>{{(user.displayName) ? user.displayName : 'User'}}</h1>
+    <div class="top">
+        <span>{{(user.displayName) ? user.displayName : 'User'}}</span>
+        <img src="{{(user.photoURL) ? user.photoURL : '/assets/dummy-user.png'}}"
+        alt="{{user.displayName}}">
+    </div>
     <div class="order-amount">
+        <p>Selecione abaixo sua opção</p>
         <div (click)="order.amount = 0" [class.selected]="order.amount == 0" title="Não vou querer dessa vez">
             <img src="assets/no-thanks.jpeg" alt="Não vou querer dessa vez"
             class="qtd0">

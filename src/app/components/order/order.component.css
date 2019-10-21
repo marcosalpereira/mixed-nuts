@@ -16,13 +16,20 @@
 .content {
     min-width: 26.78rem;
     width: 26.78rem;
-    height: 47.64rem;
+    height: 26.78rem;
     text-align: center;
+    border: 2px solid navy;
     margin: 0 auto;
-    box-shadow: 2px 2px 4px #242121a2;
-    border-radius: 5px;
+    /* box-shadow: 2px 2px 4px #242121a2;
+    border-radius: 5px; */
 }
 
+.order-amount p {
+    margin-top: 10px;
+    padding: 5px;
+    display: block;
+    box-shadow: 2px 2px 4px #242121a2;
+}
 .order-amount img {
     height: 6rem;
     width: 6rem;
@@ -32,7 +39,7 @@
     padding: 5px;
     background-color: #fff;
     opacity: 0.6;
-    margin: 5px;
+    margin: 0 5px;
     display: inline-block;
     position: relative;
     cursor: pointer;
@@ -59,4 +66,27 @@
     margin-top: 1rem;
     font-size: 2rem;
     text-shadow: 2px 2px 4px #242121a2;
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: navy;
+}
+
+.top span {
+    color: white;
+    font-weight: bold;
+    padding: 5px;
+    font-size: 1rem;
+    line-height: 32px;
+    text-shadow: 2px 2px 4px #242121a2;
+}
+
+.top img {
+    margin-right: 5px;
+    border-radius: 50%;
+    height: 32px;
+    width: 32px;
 }
