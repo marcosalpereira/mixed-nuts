@@ -22,13 +22,14 @@
 
 .bg {
     position: fixed;
+
     top: 32px;
     left: calc(50vw - 26.78rem / 2);
+    height: 100vh;
+
     box-sizing: border-box;
     min-width: 26.78rem;
     width: 26.78rem;
-    height: 100vh;
-    margin: 0 auto;
     background-image: url("src/assets/nuts.jpeg");
     background-repeat: no-repeat;
     background-size: 100%;
@@ -36,11 +37,10 @@
 }
 
 .content {
-    min-width: 26.78rem;
-    width: 26.78rem;
+    width: calc(26.78rem - 2px);
     text-align: center;
     margin: 0 auto;
-    border: 2px solid navy;
+    border: 1px solid navy;
 }
 
 .order-amount p {
