@@ -1,21 +1,27 @@
-<img src="assets/nuts.jpeg" alt="Nuts Logo">
-
-<div *ngIf="authService.userData as user; else loggin">
+<div class="bg"></div>
+<div class="content" *ngIf="authService.userData as user; else loggin">
     <h1>{{(user.displayName) ? user.displayName : 'User'}}</h1>
-    <p>Previsão: 21 de Outubro</p>
-    <form #form="ngForm" (ngSubmit)="onSubmit()">
-        <select [(ngModel)]="order.amount" name="amount" required>
-            <option ngValue="0">Não</option>
-            <option ngValue="1">Um</option>
-            <option ngValue="2">Dois</option>
-        </select>
-        <button type="submit">Submit</button>
-    </form>
-</div>
+    <div class="order-amount">
+        <div (click)="order.amount = 0" [class.selected]="order.amount == 0" title="Não vou querer dessa vez">
+            <img src="assets/no-thanks.jpeg" alt="Não vou querer dessa vez"
+            class="qtd0">
+        </div>
+        <div (click)="order.amount = 1" [class.selected]="order.amount == 1">
+            <img src="assets/nuts192.png" title="Quero um pacote" alt="Quero um pacote" class="qtd1">
+            <span class="badge">1</span>
+        </div>
+        <div (click)="order.amount = 2" [class.selected]="order.amount == 2">
+            <img src="assets/nuts192.png" title="Quero dois pacote" alt="Quero dois pacotes" class="qtd2">
+            <span class="badge">2</span>
+        </div>
+    </div>
 
-<ng-template #loggin>
-    <button type="button" class="btn googleBtn" (click)="authService.GoogleAuth()">
-        <i class="fab fa-google-plus-g"></i>
-        Log in with Google
-    </button>
-</ng-template>
+    <p class="previsao">Previsão: 21 de Outubro</p>
+
+    <ng-template #loggin>
+        <button type="button" class="btn googleBtn" (click)="authService.GoogleAuth()">
+            <i class="fab fa-google-plus-g"></i>
+            Entrar usando conta do Google
+        </button>
+    </ng-template>
+</div>

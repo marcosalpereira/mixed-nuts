@@ -1,3 +1,62 @@
-.brand-logo {
-    /* height: 80px; */
+.bg {
+    position: fixed;
+    top: 0;
+    left: calc(50vw - 26.78rem / 2);
+    box-sizing: border-box;
+    min-width: 26.78rem;
+    width: 26.78rem;
+    height: 47.64rem;
+    margin: 0 auto;
+    background-image: url("src/assets/nuts.jpeg");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    opacity: 0.3;
+}
+
+.content {
+    min-width: 26.78rem;
+    width: 26.78rem;
+    height: 47.64rem;
+    text-align: center;
+    margin: 0 auto;
+    box-shadow: 2px 2px 4px #242121a2;
+    border-radius: 5px;
+}
+
+.order-amount img {
+    height: 6rem;
+    width: 6rem;
+}
+
+.order-amount div {
+    padding: 5px;
+    background-color: #fff;
+    opacity: 0.6;
+    margin: 5px;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 2px 2px 4px #242121a2;
+    border-radius: 5px;
+}
+
+.badge {
+    position: absolute;
+    right: 2px;
+    top: 3px;
+    background-color: red;
+    color: white;
+    border: 1px solid white;
+    border-radius: 5px;
+}
+
+.selected {
+    outline: 3px dotted navy;
+    border-radius: 5px;
+}
+
+.content .previsao, .content h1 {
+    margin-top: 1rem;
+    font-size: 2rem;
+    text-shadow: 2px 2px 4px #242121a2;
 }

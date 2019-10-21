@@ -8,7 +8,7 @@ import { Order } from 'src/app/shared/model/order.model';
   styleUrls: ['./order.component.css']
 })
 export class OrderComponent implements OnInit {
-  order: Order;
+  order: Order = {amount: 0};
 
   constructor(public authService: AuthService) {}
 

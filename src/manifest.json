@@ -1,0 +1,26 @@
+{
+  "short_name": "Mixed Nuts",
+  "name": "Mixed Nuts App",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "nuts192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "nuts512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": ".",
+  "orientation": "portrait",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}
