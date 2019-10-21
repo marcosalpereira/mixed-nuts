@@ -34,8 +34,15 @@ export class DataService {
     });
   }
 
-  openShipment$(): Observable<Shipment> {
+  // https://itnext.io/how-to-crud-in-angular-firebase-firestore-456353d7c62
 
+  openShipment$(): Observable<Shipment> {
+    return this.fireStore.collection('shipments').snapshotChanges().pipe(
+
+    )
+    shipmentsRef.set(userData, {
+      merge: true
+    });
     return this._openShipment$;
   }
 
