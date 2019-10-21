@@ -1,25 +1,25 @@
 <div class="bg"></div>
-<div class="content" *ngIf="authService.userData as user; else loggin">
+<div class="content" *ngIf="user; else loggin">
     <div class="top">
         <span>{{(user.displayName) ? user.displayName : 'User'}}</span>
         <img src="{{(user.photoURL) ? user.photoURL : '/assets/dummy-user.png'}}" alt="{{user.displayName}}">
     </div>
     <section class="order-amount">
         <p>Selecione abaixo sua opção</p>
-        <div (click)="onClick(0)" [class.selected]="order.amount == 0" title="Não vou querer dessa vez">
+        <div (click)="onClick(0)" [class.selected]="orderAmount == 0" title="Não vou querer dessa vez">
             <img src="assets/no-thanks.jpeg" alt="Não vou querer dessa vez" class="qtd0">
         </div>
-        <div (click)="onClick(1)" [class.selected]="order.amount == 1">
+        <div (click)="onClick(1)" [class.selected]="orderAmount == 1">
             <img src="assets/nuts192.png" title="Quero um pacote" alt="Quero um pacote" class="qtd1">
             <span class="badge">1</span>
         </div>
-        <div (click)="onClick(2)" [class.selected]="order.amount == 2">
+        <div (click)="onClick(2)" [class.selected]="orderAmount == 2">
             <img src="assets/nuts192.png" title="Quero dois pacote" alt="Quero dois pacotes" class="qtd2">
             <span class="badge">2</span>
         </div>
-        <p *ngIf="order.amount == 0">Selecionado: Não, obrigado!</p>
-        <p *ngIf="order.amount == 1">Selecionado: <b>um</b> pacote</p>
-        <p *ngIf="order.amount == 2">Selecionado: <b>dois</b> pacotes</p>
+        <p *ngIf="orderAmount == 0">Selecionado: Não, obrigado!</p>
+        <p *ngIf="orderAmount == 1">Selecionado: <b>um</b> pacote</p>
+        <p *ngIf="orderAmount == 2">Selecionado: <b>dois</b> pacotes</p>
         <p class="previsao">Previsão: 21 de Outubro</p>
     </section>
 
@@ -33,7 +33,7 @@
     </section>
 
     <ng-template #loggin>
-        <button type="button" class="btn googleBtn" (click)="authService.GoogleAuth()">
+        <button type="button" class="btn googleBtn" (click)="login()">
             <i class="fab fa-google-plus-g"></i>
             Entrar usando conta do Google
         </button>

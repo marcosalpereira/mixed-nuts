@@ -1,4 +1,13 @@
+
+export enum OrderStatus {
+    PENDING = 'PENDING',
+    DELIVERED = 'DELIVERED',
+    PAID = 'PAID'
+}
+
 export interface Order {
-    amount?: number;
-    date?: Date;
+    shipment: string;
+    user: string;
+    amount: number;
+    status: OrderStatus;
 }

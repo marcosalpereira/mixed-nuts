@@ -1,53 +1,62 @@
 import { Injectable } from '@angular/core';
-import { User } from '../services/user';
+import { User } from '../model/user';
 import { auth } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import {
   AngularFirestore,
   AngularFirestoreDocument
 } from '@angular/fire/firestore';
+import { Subject, Observable } from 'rxjs';
+import { Shipment } from '../model/shipment.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
-  userData: any; // Save logged in user data
+export class DataService {
+  private authData = new Subject<User>();
+  authData$ = this.authData.asObservable();
+
+  private openShipmentSubject = new Subject<Shipment>();
+  private _openShipment$ = this.openShipmentSubject.asObservable();
 
   constructor(
-    public afs: AngularFirestore, // Inject Firestore service
-    public afAuth: AngularFireAuth, // Inject Firebase auth service
+    public fireStore: AngularFirestore,
+    public fireAuth: AngularFireAuth,
   ) {
-    /* Saving user data in localstorage when
-    logged in and setting up null when logged out */
-    this.afAuth.authState.subscribe(user => {
+    this.fireAuth.authState.subscribe(user => {
       if (user) {
-        this.userData = user;
-        localStorage.setItem('user', JSON.stringify(this.userData));
-        JSON.parse(localStorage.getItem('user'));
+        localStorage.setItem('user', JSON.stringify(user));
+        this.authData.next(user);
       } else {
         localStorage.setItem('user', null);
-        JSON.parse(localStorage.getItem('user'));
+        this.authData.next(null);
       }
     });
+  }
+
+  openShipment$(): Observable<Shipment> {
+
+    return this._openShipment$;
   }
 
   // Returns true when user is looged in and email is verified
   get isLoggedIn(): boolean {
     const user = JSON.parse(localStorage.getItem('user'));
-    return user !== null && user.emailVerified !== false ? true : false;
+    return user !== null;
   }
 
   // Sign in with Google
-  GoogleAuth() {
-    return this.AuthLogin(new auth.GoogleAuthProvider());
+  googleAuth(): void {
+    this.authLogin(new auth.GoogleAuthProvider());
   }
 
   // Auth logic to run auth providers
-  AuthLogin(provider) {
-    return this.afAuth.auth
+  private authLogin(provider): void {
+    this.fireAuth.auth
       .signInWithPopup(provider)
       .then(result => {
-        this.SetUserData(result.user);
+        this.authData.next(result.user);
+        this.setUserData(result.user);
       })
       .catch(error => {
         window.alert(error);
@@ -57,18 +66,17 @@ export class AuthService {
   /* Setting up user data when sign in with username/password,
   sign up with username/password and sign in with social auth
   provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
-  SetUserData(user) {
-    const userRef: AngularFirestoreDocument<any> = this.afs.doc(
+  private setUserData(user): void {
+    const userRef: AngularFirestoreDocument<any> = this.fireStore.doc(
       `users/${user.uid}`
     );
     const userData: User = {
       uid: user.uid,
       email: user.email,
       displayName: user.displayName,
-      photoURL: user.photoURL,
-      emailVerified: user.emailVerified
+      photoURL: user.photoURL
     };
-    return userRef.set(userData, {
+    userRef.set(userData, {
       merge: true
     });
   }
