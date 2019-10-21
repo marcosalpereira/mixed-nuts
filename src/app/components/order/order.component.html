@@ -2,26 +2,35 @@
 <div class="content" *ngIf="authService.userData as user; else loggin">
     <div class="top">
         <span>{{(user.displayName) ? user.displayName : 'User'}}</span>
-        <img src="{{(user.photoURL) ? user.photoURL : '/assets/dummy-user.png'}}"
-        alt="{{user.displayName}}">
+        <img src="{{(user.photoURL) ? user.photoURL : '/assets/dummy-user.png'}}" alt="{{user.displayName}}">
     </div>
-    <div class="order-amount">
+    <section class="order-amount">
         <p>Selecione abaixo sua opção</p>
-        <div (click)="order.amount = 0" [class.selected]="order.amount == 0" title="Não vou querer dessa vez">
-            <img src="assets/no-thanks.jpeg" alt="Não vou querer dessa vez"
-            class="qtd0">
+        <div (click)="onClick(0)" [class.selected]="order.amount == 0" title="Não vou querer dessa vez">
+            <img src="assets/no-thanks.jpeg" alt="Não vou querer dessa vez" class="qtd0">
         </div>
-        <div (click)="order.amount = 1" [class.selected]="order.amount == 1">
+        <div (click)="onClick(1)" [class.selected]="order.amount == 1">
             <img src="assets/nuts192.png" title="Quero um pacote" alt="Quero um pacote" class="qtd1">
             <span class="badge">1</span>
         </div>
-        <div (click)="order.amount = 2" [class.selected]="order.amount == 2">
+        <div (click)="onClick(2)" [class.selected]="order.amount == 2">
             <img src="assets/nuts192.png" title="Quero dois pacote" alt="Quero dois pacotes" class="qtd2">
             <span class="badge">2</span>
         </div>
-    </div>
+        <p *ngIf="order.amount == 0">Selecionado: Não, obrigado!</p>
+        <p *ngIf="order.amount == 1">Selecionado: <b>um</b> pacote</p>
+        <p *ngIf="order.amount == 2">Selecionado: <b>dois</b> pacotes</p>
+        <p class="previsao">Previsão: 21 de Outubro</p>
+    </section>
 
-    <p class="previsao">Previsão: 21 de Outubro</p>
+    <section class="history">
+        <p>Histórico de pedidos</p>
+        <div class="history">
+            <span class="order" *ngFor="let o of orders">{{o.date | date : 'dd/MM/yy'}}
+                <span class="badge">{{o.amount}}</span>
+            </span>
+        </div>
+    </section>
 
     <ng-template #loggin>
         <button type="button" class="btn googleBtn" (click)="authService.GoogleAuth()">

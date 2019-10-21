@@ -1,73 +1,3 @@
-.bg {
-    position: fixed;
-    top: 0;
-    left: calc(50vw - 26.78rem / 2);
-    box-sizing: border-box;
-    min-width: 26.78rem;
-    width: 26.78rem;
-    height: 47.64rem;
-    margin: 0 auto;
-    background-image: url("src/assets/nuts.jpeg");
-    background-repeat: no-repeat;
-    background-size: 100%;
-    opacity: 0.3;
-}
-
-.content {
-    min-width: 26.78rem;
-    width: 26.78rem;
-    height: 26.78rem;
-    text-align: center;
-    border: 2px solid navy;
-    margin: 0 auto;
-    /* box-shadow: 2px 2px 4px #242121a2;
-    border-radius: 5px; */
-}
-
-.order-amount p {
-    margin-top: 10px;
-    padding: 5px;
-    display: block;
-    box-shadow: 2px 2px 4px #242121a2;
-}
-.order-amount img {
-    height: 6rem;
-    width: 6rem;
-}
-
-.order-amount div {
-    padding: 5px;
-    background-color: #fff;
-    opacity: 0.6;
-    margin: 0 5px;
-    display: inline-block;
-    position: relative;
-    cursor: pointer;
-    box-shadow: 2px 2px 4px #242121a2;
-    border-radius: 5px;
-}
-
-.badge {
-    position: absolute;
-    right: 2px;
-    top: 3px;
-    background-color: red;
-    color: white;
-    border: 1px solid white;
-    border-radius: 5px;
-}
-
-.selected {
-    outline: 3px dotted navy;
-    border-radius: 5px;
-}
-
-.content .previsao, .content h1 {
-    margin-top: 1rem;
-    font-size: 2rem;
-    text-shadow: 2px 2px 4px #242121a2;
-}
-
 .top {
     display: flex;
     justify-content: space-between;
@@ -80,7 +10,6 @@
     font-weight: bold;
     padding: 5px;
     font-size: 1rem;
-    line-height: 32px;
     text-shadow: 2px 2px 4px #242121a2;
 }
 
@@ -90,3 +19,90 @@
     height: 32px;
     width: 32px;
 }
+
+.bg {
+    position: fixed;
+    top: 32px;
+    left: calc(50vw - 26.78rem / 2);
+    box-sizing: border-box;
+    min-width: 26.78rem;
+    width: 26.78rem;
+    height: 100vh;
+    margin: 0 auto;
+    background-image: url("src/assets/nuts.jpeg");
+    background-repeat: no-repeat;
+    background-size: 100%;
+    opacity: 0.15;
+}
+
+.content {
+    min-width: 26.78rem;
+    width: 26.78rem;
+    text-align: center;
+    margin: 0 auto;
+    border: 2px solid navy;
+}
+
+.order-amount p {
+    margin: 10px 5px;
+    padding: 5px;
+    display: block;
+    box-shadow: 2px 2px 4px #242121a2;
+}
+.order-amount img {
+    height: 6rem;
+    width: 6rem;
+}
+
+.order-amount div {
+    padding: 5px;
+    background-color: transparent;
+    margin: 0 5px;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 2px 2px 4px #242121a2;
+    border-radius: 5px;
+    box-sizing: border-box;
+    border: 3px solid transparent;
+}
+
+.order-amount .selected {
+    border: 3px solid navy;
+    border-radius: 5px;
+}
+
+.badge {
+    opacity: 1;
+    position: absolute;
+    right: 2px;
+    top: 3px;
+    background-color: navy;
+    color: white;
+    border: 1px solid white;
+    border-radius: 50%;
+    padding: 2px 5px;
+    box-shadow: 2px 2px 4px #242121a2;
+    font-size: 80%;
+}
+
+.history p {
+    margin-bottom: 5px;
+}
+
+.history {
+    padding-bottom: 5px;
+}
+
+.history .order {
+    display: inline-block;
+    padding: 5px 25px 5px 5px;
+    position: relative;
+    border-radius: 5px;
+    box-shadow: 2px 2px 4px #242121a2;
+    margin: 0 2px;
+    white-space: nowrap;
+    text-align: left;
+}
+
+
