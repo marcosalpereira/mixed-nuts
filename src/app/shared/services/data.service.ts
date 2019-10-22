@@ -8,6 +8,8 @@ import {
 } from '@angular/fire/firestore';
 import { Subject, Observable } from 'rxjs';
 import { Shipment } from '../model/shipment.model';
+import { OrderStatus } from '../model/order.model';
+import { filter } from 'minimatch';
 
 @Injectable({
   providedIn: 'root'
@@ -16,19 +18,22 @@ export class DataService {
   private authData = new Subject<User>();
   authData$ = this.authData.asObservable();
 
-  private openShipmentSubject = new Subject<Shipment>();
-  private _openShipment$ = this.openShipmentSubject.asObservable();
-
   constructor(
-    public fireStore: AngularFirestore,
-    public fireAuth: AngularFireAuth,
+    private fireStore: AngularFirestore,
+    private fireAuth: AngularFireAuth,
   ) {
-    this.fireAuth.authState.subscribe(user => {
-      if (user) {
+    this.fireAuth.authState.subscribe(userData => {
+      if (userData) {
+        const user: User = {
+          displayName: userData.displayName,
+          email: userData.email,
+          photoURL: userData.photoURL,
+          uid: userData.uid,
+        };
         localStorage.setItem('user', JSON.stringify(user));
         this.authData.next(user);
       } else {
-        localStorage.setItem('user', null);
+        localStorage.removeItem('user');
         this.authData.next(null);
       }
     });
@@ -36,14 +41,8 @@ export class DataService {
 
   // https://itnext.io/how-to-crud-in-angular-firebase-firestore-456353d7c62
 
-  openShipment$(): Observable<Shipment> {
-    return this.fireStore.collection('shipments').snapshotChanges().pipe(
-
-    )
-    shipmentsRef.set(userData, {
-      merge: true
-    });
-    return this._openShipment$;
+  shipments$(): Observable<Shipment[]> {
+    return this.fireStore.collection<Shipment>('shipments').valueChanges();
   }
 
   // Returns true when user is looged in and email is verified
@@ -55,6 +54,10 @@ export class DataService {
   // Sign in with Google
   googleAuth(): void {
     this.authLogin(new auth.GoogleAuthProvider());
+  }
+
+  loggout() {
+    this.fireAuth.auth.signOut();
   }
 
   // Auth logic to run auth providers
@@ -70,22 +73,36 @@ export class DataService {
       });
   }
 
-  /* Setting up user data when sign in with username/password,
-  sign up with username/password and sign in with social auth
-  provider in Firestore database using AngularFirestore + AngularFirestoreDocument service */
-  private setUserData(user): void {
-    const userRef: AngularFirestoreDocument<any> = this.fireStore.doc(
-      `users/${user.uid}`
-    );
-    const userData: User = {
-      uid: user.uid,
-      email: user.email,
-      displayName: user.displayName,
-      photoURL: user.photoURL
+  private setUserData(fbuser: firebase.User): void {
+    const userRef: AngularFirestoreDocument<any> = this.fireStore.doc(`users/${fbuser.uid}`);
+    const user: User = {
+      uid: fbuser.uid,
+      email: fbuser.email,
+      displayName: fbuser.displayName,
+      photoURL: fbuser.photoURL
     };
-    userRef.set(userData, {
-      merge: true
-    });
+    userRef.set(user);
   }
+
+  placeOrder(user: User, shipment: Shipment, orderAmount: number) {
+    if (!user.orders) { user.orders = []; }
+    const orderIndex = user.orders.findIndex(o => o.shipmentUid === shipment.uid);
+    console.log({orderIndex})
+    if (orderIndex !== -1) {
+      user.orders[orderIndex].amount = orderAmount;
+    } else {
+      user.orders.push({
+        shipmentUid: shipment.uid,
+        shipmentDate: shipment.date,
+        amount: orderAmount,
+        status: OrderStatus.PENDING,
+      });
+    }
+    console.log( {user})
+    this.fireStore.collection('users')
+       .doc(user.uid)
+       .set(user);
+  }
+
 
 }

@@ -11,22 +11,24 @@ import { Shipment } from 'src/app/shared/model/shipment.model';
 })
 export class OrderComponent implements OnInit, OnDestroy {
   user: User;
-  orderAmount: number;
+  orderAmount = 0;
   authDataSub: Subscription;
-  openShipmentSub: Subscription;
-  openShipment: Shipment;
+
+  lastShipmentSub: Subscription;
+  lastShipment: Shipment;
 
   constructor(
     private dataService: DataService,
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.authDataSub = this.dataService.authData$.subscribe(
       user => this.setUser(user));
 
-      this.openShipmentSub = this.dataService.openShipment$(
-        shipment => this.openShipment = shipment;
-      )
+    this.lastShipmentSub = this.dataService.shipments$().subscribe(
+      shipments => this.lastShipment = shipments.find(shipment => shipment.open)
+    );
+
   }
 
   setUser(user: User): void {
@@ -39,10 +41,15 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   onClick(amount: number) {
     this.orderAmount = amount;
+    this.dataService.placeOrder(this.user, this.lastShipment, this.orderAmount);
   }
 
   login() {
     this.dataService.googleAuth();
+  }
+
+  logout() {
+    this.dataService.loggout();
   }
 
 }

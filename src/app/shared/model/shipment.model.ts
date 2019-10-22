@@ -2,6 +2,6 @@ import { Order } from './order.model';
 
 export interface Shipment {
     uid: string;
-    date: Date;
+    date: string;
     open: boolean;
 }

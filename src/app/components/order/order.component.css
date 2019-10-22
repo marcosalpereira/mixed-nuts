@@ -43,7 +43,8 @@
     border: 1px solid navy;
 }
 
-.order-amount p {
+.content p {
+    cursor: default;
     margin: 10px 5px;
     padding: 5px;
     display: block;
@@ -67,6 +68,10 @@
     border: 3px solid transparent;
 }
 
+.order-amount div.disabled {
+    cursor: not-allowed;
+}
+
 .order-amount .selected {
     border: 3px solid navy;
     border-radius: 5px;
@@ -83,7 +88,7 @@
     border-radius: 50%;
     padding: 2px 5px;
     box-shadow: 2px 2px 4px #242121a2;
-    font-size: 80%;
+    font-size: 90%;
 }
 
 .history p {

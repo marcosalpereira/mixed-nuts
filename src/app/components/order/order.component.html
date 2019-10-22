@@ -1,41 +1,42 @@
-<div class="bg"></div>
-<div class="content" *ngIf="user; else loggin">
-    <div class="top">
-        <span>{{(user.displayName) ? user.displayName : 'User'}}</span>
-        <img src="{{(user.photoURL) ? user.photoURL : '/assets/dummy-user.png'}}" alt="{{user.displayName}}">
+<!-- <div class="bg"></div> -->
+<div class="content">
+    <div *ngIf="user" class="top">
+        <span>{{(user?.displayName) ? user?.displayName : user?.email}}</span>
+        <img title="Sair" style="cursor: pointer" (click)="logout()" src="{{(user.photoURL) ? user.photoURL : '/assets/dummy-user.png'}}" alt="{{user.displayName}}">
     </div>
-    <section class="order-amount">
+    <div *ngIf="!user" class="top">
+        <span style="cursor: pointer" (click)="login()">Entrar usando conta do Google</span>
+        <img src="assets/dummy-user.png" alt="Não Logado">
+    </div>
+
+    <p class="previsao">{{lastShipment ? 'Previsão:' + lastShipment.date : 'Nenhuma remessa prevista'}}</p>
+
+    <section *ngIf="user" class="order-amount">
         <p>Selecione abaixo sua opção</p>
-        <div (click)="onClick(0)" [class.selected]="orderAmount == 0" title="Não vou querer dessa vez">
+        <div [class.disabled]="!lastShipment?.open" (click)="onClick(0)" [class.selected]="orderAmount == 0"
+            title="Não vou querer dessa vez">
             <img src="assets/no-thanks.jpeg" alt="Não vou querer dessa vez" class="qtd0">
         </div>
-        <div (click)="onClick(1)" [class.selected]="orderAmount == 1">
+        <div [class.disabled]="!lastShipment?.open" (click)="onClick(1)" [class.selected]="orderAmount == 1">
             <img src="assets/nuts192.png" title="Quero um pacote" alt="Quero um pacote" class="qtd1">
             <span class="badge">1</span>
         </div>
-        <div (click)="onClick(2)" [class.selected]="orderAmount == 2">
+        <div [class.disabled]="!lastShipment?.open" (click)="onClick(2)" [class.selected]="orderAmount == 2">
             <img src="assets/nuts192.png" title="Quero dois pacote" alt="Quero dois pacotes" class="qtd2">
             <span class="badge">2</span>
         </div>
         <p *ngIf="orderAmount == 0">Selecionado: Não, obrigado!</p>
         <p *ngIf="orderAmount == 1">Selecionado: <b>um</b> pacote</p>
         <p *ngIf="orderAmount == 2">Selecionado: <b>dois</b> pacotes</p>
-        <p class="previsao">Previsão: 21 de Outubro</p>
     </section>
 
     <section class="history">
         <p>Histórico de pedidos</p>
         <div class="history">
-            <span class="order" *ngFor="let o of orders">{{o.date | date : 'dd/MM/yy'}}
-                <span class="badge">{{o.amount}}</span>
+            <span class="order" *ngFor="let order of user?.orders">{{order.shipmentDate}}
+                <span class="badge">{{order.amount}}</span>
             </span>
         </div>
     </section>
 
-    <ng-template #loggin>
-        <button type="button" class="btn googleBtn" (click)="login()">
-            <i class="fab fa-google-plus-g"></i>
-            Entrar usando conta do Google
-        </button>
-    </ng-template>
 </div>
