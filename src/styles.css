@@ -9,6 +9,19 @@ html {
     font-family: Arial, Helvetica, sans-serif;
 }
 
+@media (min-width: 768px) {
+    html {
+      font-size: 20px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    html {
+      font-size: 28px;
+    }
+  }
+
+
 p {
     margin: 0;
 }
