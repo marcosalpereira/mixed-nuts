@@ -1,7 +1,7 @@
 <div class="bg"></div>
 <div class="content">
     <div *ngIf="user" class="top">
-        <span>{{(user?.displayName) ? user?.displayName : user?.email}}</span>
+        <span [title]="user.email">{{(user?.displayName) ? user?.displayName : user?.email}}</span>
         <img title="Sair" style="cursor: pointer" (click)="logout()"
             src="{{(user.photoURL) ? user.photoURL : '/assets/dummy-user.png'}}">
     </div>
@@ -17,20 +17,16 @@
         <div [class.disabled]="!lastShipment?.open" (click)="onClick(0)" [class.selected]="orderAmount == 0"
             title="Não vou querer dessa vez">
             <img src="assets/no-thanks.jpeg" alt="Não vou querer dessa vez" class="qtd0">
+            <footer>Zero</footer>
         </div>
         <div [class.disabled]="!lastShipment?.open" (click)="onClick(1)" [class.selected]="orderAmount == 1">
             <img src="assets/nuts192.png" title="Quero um pacote" alt="Quero um pacote" class="qtd1">
-            <span class="badge">1</span>
+            <footer>Um Pacote</footer>
         </div>
         <div [class.disabled]="!lastShipment?.open" (click)="onClick(2)" [class.selected]="orderAmount == 2">
             <img src="assets/nuts192.png" title="Quero dois pacote" alt="Quero dois pacotes" class="qtd2">
-            <span class="badge">2</span>
+            <footer>Dois Pacotes</footer>
         </div>
-
-        <p *ngIf="orderAmount == 0">Selecionado: Não, obrigado!</p>
-        <p *ngIf="orderAmount == 1">Selecionado: <b>um</b> pacote</p>
-        <p *ngIf="orderAmount == 2">Selecionado: <b>dois</b> pacotes</p>
-
     </section>
 
     <section class="history">

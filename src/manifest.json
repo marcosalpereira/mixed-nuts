@@ -8,12 +8,12 @@
       "type": "image/x-icon"
     },
     {
-      "src": "nuts192.png",
+      "src": "assets/nuts192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "nuts512.png",
+      "src": "assets/nuts512.png",
       "type": "image/png",
       "sizes": "512x512"
     }

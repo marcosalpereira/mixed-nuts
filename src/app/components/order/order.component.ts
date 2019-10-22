@@ -18,48 +18,61 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   lastShipmentSub: Subscription;
   lastShipment: Shipment;
+  orderSub: Subscription;
 
-  constructor(
-    private dataService: DataService,
-  ) { }
+  constructor(private dataService: DataService) {}
 
   ngOnInit() {
-    this.authDataSub = this.dataService.authData$.subscribe(
-      user => {
-        this.user = user;
-        if (user) {
-          this.orders = user.orders;
-          this.updateState();
-        } else {
-          this.orders = [];
-        }
+    this.authDataSub = this.dataService.authData$.subscribe(user => {
+      this.user = user;
+      if (user) {
+        this.getOrders(user);
+      } else {
+        this.orders = [];
       }
-    );
+    });
 
-    this.lastShipmentSub = this.dataService.shipments$().subscribe(
-      shipments => {
+    this.lastShipmentSub = this.dataService
+      .shipments$()
+      .subscribe(shipments => {
         this.lastShipment = shipments.find(shipment => shipment.open);
         this.updateState();
-      }
-    );
+      });
+  }
 
+  getOrders(user: User) {
+    if (this.orderSub) {
+      this.orderSub.unsubscribe();
+    }
+    this.orderSub = this.dataService.orders$(user.uid).subscribe(orders => {
+      this.orders = orders;
+      this.updateState();
+    });
   }
 
   updateState(): void {
-    if (!this.lastShipment || !this.user) {
-      setTimeout( () => this.updateState(), 500);
+    if (!this.lastShipment || !this.orders) {
+      setTimeout(() => this.updateState(), 500);
     } else {
       if (this.orders) {
-        const order = this.orders.find(o => o.shipmentUid === this.lastShipment.uid);
+        const order = this.orders.find(
+          o => o.shipmentUid === this.lastShipment.uid
+        );
         this.orderAmount = order ? order.amount : 0;
       }
     }
-
   }
 
   ngOnDestroy() {
-    this.authDataSub.unsubscribe();
-    this.lastShipmentSub.unsubscribe();
+    if (this.authDataSub) {
+      this.authDataSub.unsubscribe();
+    }
+    if (this.lastShipmentSub) {
+      this.lastShipmentSub.unsubscribe();
+    }
+    if (this.orderSub) {
+      this.orderSub.unsubscribe();
+    }
   }
 
   onClick(amount: number) {
@@ -74,5 +87,4 @@ export class OrderComponent implements OnInit, OnDestroy {
   logout() {
     this.dataService.loggout();
   }
-
 }
