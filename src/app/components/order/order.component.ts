@@ -27,8 +27,12 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.authDataSub = this.dataService.authData$.subscribe(
       user => {
         this.user = user;
-        this.orders = user.orders;
-        this.updateState();
+        if (user) {
+          this.orders = user.orders;
+          this.updateState();
+        } else {
+          this.orders = [];
+        }
       }
     );
 
