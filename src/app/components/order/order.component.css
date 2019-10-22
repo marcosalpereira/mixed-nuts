@@ -3,6 +3,7 @@
     justify-content: space-between;
     align-items: center;
     background-color: navy;
+    height: 2rem;
 }
 
 .top span {
@@ -16,15 +17,27 @@
 .top img {
     margin-right: 5px;
     border-radius: 50%;
-    height: 32px;
-    width: 32px;
+    height: 2rem;
+    width: 2rem;
     color: white;
+}
+
+.top .photo {
+    position: relative;
+}
+
+.top .photo footer {
+    position: absolute;
+    bottom: 2px;
+    left: 0.4rem;
+    color: white;
+    font-size: 0.6rem;
 }
 
 .bg {
     position: fixed;
 
-    top: 32px;
+    top: 2rem;
     left: calc(50vw - 26.78rem / 2);
     height: 100vh;
 

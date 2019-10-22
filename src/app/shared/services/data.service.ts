@@ -58,6 +58,7 @@ export class DataService implements OnDestroy {
 
   loggout() {
     this.fireAuth.auth.signOut();
+    this.authData.next(null);
   }
 
   private authLogin(provider: auth.AuthProvider): void {

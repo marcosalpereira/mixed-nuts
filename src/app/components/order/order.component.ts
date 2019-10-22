@@ -27,10 +27,15 @@ export class OrderComponent implements OnInit, OnDestroy {
       this.user = user;
       if (user) {
         this.getOrders(user);
+        this.getLastShipment();
       } else {
         this.orders = [];
       }
     });
+  }
+
+  private getLastShipment() {
+    this.lastShipmentUnsubscribe();
 
     this.lastShipmentSub = this.dataService
       .shipments$()
@@ -41,9 +46,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   getOrders(user: User) {
-    if (this.orderSub) {
-      this.orderSub.unsubscribe();
-    }
+    this.ordersUnsubscribe();
     this.orderSub = this.dataService.orders$(user.uid).subscribe(orders => {
       this.orders = orders;
       this.updateState();
@@ -67,11 +70,19 @@ export class OrderComponent implements OnInit, OnDestroy {
     if (this.authDataSub) {
       this.authDataSub.unsubscribe();
     }
-    if (this.lastShipmentSub) {
-      this.lastShipmentSub.unsubscribe();
-    }
+    this.lastShipmentUnsubscribe();
+    this.ordersUnsubscribe();
+  }
+
+  private ordersUnsubscribe() {
     if (this.orderSub) {
       this.orderSub.unsubscribe();
+    }
+  }
+
+  private lastShipmentUnsubscribe() {
+    if (this.lastShipmentSub) {
+      this.lastShipmentSub.unsubscribe();
     }
   }
 

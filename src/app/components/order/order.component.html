@@ -2,8 +2,11 @@
 <div class="content">
     <div *ngIf="user" class="top">
         <span [title]="user.email">{{(user?.displayName) ? user?.displayName : user?.email}}</span>
-        <img title="Sair" style="cursor: pointer" (click)="logout()"
+        <div class="photo">
+            <img title="Sair" style="cursor: pointer" (click)="logout()"
             src="{{(user.photoURL) ? user.photoURL : '/assets/dummy-user.png'}}">
+            <footer>Sair</footer>
+        </div>
     </div>
     <div *ngIf="!user" class="top">
         <span style="cursor: pointer" (click)="login()">Entrar usando conta do Google</span>
@@ -24,7 +27,7 @@
             <footer>Um Pacote</footer>
         </div>
         <div [class.disabled]="!lastShipment?.open" (click)="onClick(2)" [class.selected]="orderAmount == 2">
-            <img src="assets/nuts192.png" title="Quero dois pacote" alt="Quero dois pacotes" class="qtd2">
+            <img src="assets/nuts192.png" title="Quero dois pacotes" alt="Quero dois pacotes" class="qtd2">
             <footer>Dois Pacotes</footer>
         </div>
     </section>
