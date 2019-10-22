@@ -2,14 +2,13 @@
 <div class="content">
     <div *ngIf="user" class="top">
         <span [title]="user.email">{{(user?.displayName) ? user?.displayName : user?.email}}</span>
-        <div class="photo">
-            <img title="Sair" style="cursor: pointer" (click)="logout()"
-            src="{{(user.photoURL) ? user.photoURL : '/assets/dummy-user.png'}}">
+        <div title="Sair" (click)="logout()" class="photo" style="cursor: pointer">
+            <img title="Sair" src="{{(user.photoURL) ? user.photoURL : '/assets/dummy-user.png'}}">
             <footer>Sair</footer>
         </div>
     </div>
     <div *ngIf="!user" class="top">
-        <span style="cursor: pointer" (click)="login()">Entrar usando conta do Google</span>
+        <span style="cursor: pointer" (click)="login()">Clique para entrar usando conta do Google</span>
         <img src="assets/dummy-user.png" alt="Não Logado">
     </div>
 
