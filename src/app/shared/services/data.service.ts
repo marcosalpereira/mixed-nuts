@@ -1,3 +1,4 @@
+import { Shipment } from 'src/app/shared/model/shipment.model';
 import { Injectable, OnDestroy } from '@angular/core';
 import { User } from '../model/user';
 import { auth } from 'firebase/app';
@@ -7,7 +8,6 @@ import {
   AngularFirestoreDocument
 } from '@angular/fire/firestore';
 import { Subject, Observable, Subscription } from 'rxjs';
-import { Shipment } from '../model/shipment.model';
 import { OrderStatus, Order } from '../model/order.model';
 
 @Injectable({
@@ -98,4 +98,8 @@ export class DataService implements OnDestroy {
     );
     ref.set(order, { merge: true });
   }
+
+  // getShipmentOrders(shipment: Shipment): Observable<ShipmentOrder> {
+  //   this.fireStore.collection('users')
+  // }
 }

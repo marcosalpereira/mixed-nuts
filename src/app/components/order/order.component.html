@@ -1,21 +1,42 @@
 <div class="bg"></div>
-<div class="content">
-    <div *ngIf="user" class="top">
-        <span [title]="user.email">{{(user?.displayName) ? user?.displayName : user?.email}}</span>
+<header class="main">
+    <ng-container *ngIf="user">
+        <div class="user" [title]="user.email">
+            {{user.displayName ? user.displayName : user.email}}
+        </div>
         <div title="Sair" (click)="logout()" class="photo" style="cursor: pointer">
             <img title="Sair" src="{{(user.photoURL) ? user.photoURL : '/assets/dummy-user.png'}}">
             <footer>Sair</footer>
         </div>
-    </div>
-    <div *ngIf="!user" class="top">
-        <span style="cursor: pointer" (click)="login()">Clique para entrar usando conta do Google</span>
-        <img src="assets/dummy-user.png" alt="Não Logado">
-    </div>
+    </ng-container>
+    <ng-container *ngIf="!user">
+        <div class="user" style="cursor: pointer" (click)="login()">Clique para entrar
+            usando conta do Google
+        </div>
+        <div class="photo">
+            <img src="assets/dummy-user.png" alt="Não Logado">
+        </div>
+    </ng-container>
+</header>
 
-    <p class="previsao">{{lastShipment ? 'Previsão:' + lastShipment.date : 'Nenhuma remessa prevista'}}</p>
+<main>
+
+    <p>{{appTitle}}</p>
+
+    <p class="previsao">{{lastShipment ? 'Próxima remessa:' + lastShipment.date : 'Nenhuma remessa prevista'}}</p>
+    <!-- <section *ngIf="user?.admin" class="orders">
+        <ol>
+            <li *ngFor="let order of shipmentOrders | async">
+                {{order.}}
+            </li>
+        </ol>
+    </section> -->
 
     <section *ngIf="user && lastShipment" class="order-amount">
-        <p>Selecione abaixo sua opção</p>
+        <p class="info">Ao selecionar uma das opções abaixo sua escolha já será registrada. Fique livre para mudar sua
+            opção a qualquer momento (até o fechamento da remessa). Normalmente, nas sextas-feiras que
+            antecedem a entrega a remessa é fechada.
+        </p>
         <div [class.disabled]="!lastShipment?.open" (click)="onClick(0)" [class.selected]="orderAmount == 0"
             title="Não vou querer dessa vez">
             <img src="assets/no-thanks.jpeg" alt="Não vou querer dessa vez" class="qtd0">
@@ -40,4 +61,8 @@
         </div>
     </section>
 
-</div>
+</main>
+<footer class="main">
+    <small>&copy; 2019 Marcosoft, Inc.</small>
+    <img src="assets/marcosoft-w.png" alt="Marcosot">
+</footer>

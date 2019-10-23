@@ -1,43 +1,6 @@
-.top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: navy;
-    height: 2rem;
-}
-
-.top span {
-    color: white;
-    font-weight: bold;
-    padding: 5px;
-    font-size: 1rem;
-    text-shadow: 2px 2px 4px #242121a2;
-}
-
-.top img {
-    margin-right: 5px;
-    border-radius: 50%;
-    height: 2rem;
-    width: 2rem;
-    color: white;
-}
-
-.top .photo {
-    position: relative;
-}
-
-.top .photo footer {
-    position: absolute;
-    bottom: 2px;
-    left: 0.4rem;
-    color: white;
-    font-size: 0.6rem;
-}
-
 .bg {
     position: fixed;
-
-    top: 2rem;
+    top: 2.5rem;
     left: calc(50vw - 26.78rem / 2);
     height: 100vh;
 
@@ -50,20 +13,70 @@
     opacity: 0.15;
 }
 
-.content {
+header.main, main, footer.main {
     width: calc(26.78rem - 2px);
-    text-align: center;
-    margin: 0 auto;
     border: 1px solid navy;
+    margin: 0 auto;
 }
 
-.content p {
+header.main {
+    background-color: navy;
+    color: white;
+    height: 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1rem;
+}
+
+header.main .user {
+    margin-left: 5px;
+}
+
+
+header.main .photo {
+    position: relative;
+    margin-right: 5px;
+}
+
+header.main .photo img {
+    height: 2rem;
+    width: 2rem;
+    border-radius: 50%;
+    height: 100%;
+    color: white;
+}
+
+header.main .photo footer {
+    position: absolute;
+    bottom: 2px;
+    left: 0.4rem;
+    color: white;
+    font-size: 0.6rem;
+}
+
+main {
+    text-align: center;
+}
+
+main p {
     cursor: default;
     margin: 10px 5px;
     padding: 5px;
     display: block;
     box-shadow: 2px 2px 4px #242121a2;
 }
+
+main p.info {
+    font-size: 90%;
+    font-style: italic;
+    opacity: 0.9;
+}
+
+main p.previsao {
+    font-weight: bold;
+}
+
 .order-amount img {
     height: 6rem;
     width: 6rem;
@@ -124,4 +137,18 @@
     text-align: left;
 }
 
+footer.main {
+    background-color: navy;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+footer.main * {
+    padding: 5px;
+    height: 16px;
+    font-size: 16px;
+    line-height: 16px;
+}
 

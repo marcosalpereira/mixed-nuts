@@ -11,6 +11,7 @@ import { Order } from 'src/app/shared/model/order.model';
   styleUrls: ['./order.component.css']
 })
 export class OrderComponent implements OnInit, OnDestroy {
+  appTitle = 'Mixed Nuts Ordering System';
   user: User;
   orders: Order[];
   orderAmount = 0;
