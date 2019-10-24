@@ -1,3 +1,5 @@
+import { Shipment } from './shipment.model';
+import { User } from './user';
 
 export enum OrderStatus {
     PENDING = 'PENDING',
@@ -6,9 +8,11 @@ export enum OrderStatus {
 }
 
 export interface Order {
-    shipmentUid: string;
     amount: number;
     status: OrderStatus;
+}
 
-    shipmentDate: string;
+export interface ShipmentOrder {
+    shipment: Shipment;
+    user: User;
 }

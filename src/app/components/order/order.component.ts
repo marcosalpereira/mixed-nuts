@@ -48,7 +48,7 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   getOrders(user: User) {
     this.ordersUnsubscribe();
-    this.orderSub = this.dataService.orders$(user.uid).subscribe(orders => {
+    this.orderSub = this.dataService.userOrders$(user.uid).subscribe(orders => {
       this.orders = orders;
       this.updateState();
     });
