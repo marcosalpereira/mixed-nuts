@@ -3,7 +3,7 @@ import { User } from 'src/app/shared/model/user';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/shared/services/data.service';
 import { Shipment } from 'src/app/shared/model/shipment.model';
-import { Order } from 'src/app/shared/model/order.model';
+import { Order, ShipmentOrder } from 'src/app/shared/model/order.model';
 
 @Component({
   selector: 'app-order',
@@ -20,8 +20,10 @@ export class OrderComponent implements OnInit, OnDestroy {
   lastShipmentSub: Subscription;
   lastShipment: Shipment;
   orderSub: Subscription;
+  shipmentOrders: ShipmentOrder[];
+  totalShipmentOrder: number;
 
-  constructor(private dataService: DataService) {}
+  constructor(private dataService: DataService) { }
 
   ngOnInit() {
     this.authDataSub = this.dataService.authData$.subscribe(user => {
@@ -42,6 +44,14 @@ export class OrderComponent implements OnInit, OnDestroy {
       .shipments$()
       .subscribe(shipments => {
         this.lastShipment = shipments.find(shipment => shipment.open);
+        if (this.lastShipment) {
+          this.dataService.shipmentOrders$(this.lastShipment.id).subscribe(
+            shipmentsOrders => {
+              this.shipmentOrders = shipmentsOrders;
+              this.totalShipmentOrder = 0;
+              shipmentsOrders.forEach(so => this.totalShipmentOrder += so.order ? so.order.amount : 0);
+            });
+        }
         this.updateState();
       });
   }

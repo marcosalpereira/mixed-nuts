@@ -33,7 +33,6 @@ export class DataService implements OnDestroy {
           uid: userData.uid,
         };
         this.authData.next(user);
-        this.shipmentOrders$('eLLf6LpNAp7jtmeGb0ds');
       } else {
         this.authData.next(null);
       }
@@ -56,36 +55,8 @@ export class DataService implements OnDestroy {
     return userDoc.collection<Order>('orders').valueChanges();
   }
 
-  // private sub = new Subject<ShipmentOrder>();
-  // sub$ = this.sub.asObservable();
-
-  // shipmentOrders$(shipmentId: string): Observable<ShipmentOrder> {
-  //   this.fireStore.collection<User>('users').valueChanges().toPromise().then(
-  //     users => {
-  //       users.forEach(user => {
-  //         this.fireStore.doc(
-  //           `users/${user.uid}/orders/${shipmentId}`
-  //         ).get().toPromise().then(order => {
-  //           const so = {order: order.data() as Order, user};
-  //           this.sub.next(so);
-  //         });
-  //       });
-  //     }
-  //   );
-  //   return this.sub$;
-  // }
-
-  shipmentOrders$(shipmentId: string) {
-    // this.fireStore.collection<User>('users')
-    //   .valueChanges().pipe(flatMap(us => us.map( async u => {
-    //     const  o = await this.fireStore.doc(`users/${u.uid}/orders/${'eLLf6LpNAp7jtmeGb0ds'}`)
-    //       .get().toPromise();
-    //       return {order: o.data() as Order, user: u};
-
-    //   })))
-    //   .subscribe(o => console.log('o', o));
-
-    this.fireStore.collection<User>('users')
+  shipmentOrders$(shipmentId: string): Observable<ShipmentOrder[]> {
+    return this.fireStore.collection<User>('users')
       .valueChanges().pipe(
         mergeMap(users => {
           const orderObservable = users.map(user => {
@@ -101,9 +72,7 @@ export class DataService implements OnDestroy {
             })
           );
         })
-      ).subscribe(o => console.log('o', o));
-
-
+      );
   }
 
 

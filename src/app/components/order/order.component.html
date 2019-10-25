@@ -1,6 +1,6 @@
-<div class="bg"></div>
 <header class="main">
-    <ng-container *ngIf="user">
+    <div class="app-title">{{appTitle}}</div>
+    <div class="user-container" *ngIf="user">
         <div class="user" [title]="user.email">
             {{user.displayName ? user.displayName : user.email}}
         </div>
@@ -8,29 +8,27 @@
             <img title="Sair" src="{{(user.photoURL) ? user.photoURL : '/assets/dummy-user.png'}}">
             <footer>Sair</footer>
         </div>
-    </ng-container>
-    <ng-container *ngIf="!user">
+    </div>
+    <div class="user-container" *ngIf="!user">
         <div class="user" style="cursor: pointer" (click)="login()">Clique para entrar
             usando conta do Google
         </div>
         <div class="photo">
             <img src="assets/dummy-user.png" alt="Não Logado">
         </div>
-    </ng-container>
+    </div>
 </header>
 
 <main>
 
-    <p>{{appTitle}}</p>
-
-    <p class="previsao">{{lastShipment ? 'Próxima remessa:' + lastShipment.date : 'Nenhuma remessa prevista'}}</p>
-    <!-- <section *ngIf="user?.admin" class="orders">
-        <ol>
-            <li *ngFor="let order of shipmentOrders | async">
-                {{order.}}
-            </li>
-        </ol>
-    </section> -->
+    <p class="previsao">{{lastShipment ? 'Próxima remessa:' + lastShipment.date + ' [' + totalShipmentOrder + ' pacotes]' : 'Nenhuma remessa prevista'}}</p>
+    <section *ngIf="shipmentOrders" class="orders">
+            <ng-container *ngFor="let sh of shipmentOrders">
+                <span class="order" *ngIf="sh?.order?.amount > 0">{{sh.user.displayName}}
+                    <span class="badge">{{sh.order.amount}}</span>
+                </span>
+            </ng-container>
+    </section>
 
     <section *ngIf="user && lastShipment" class="order-amount">
         <p class="info">Ao selecionar uma das opções abaixo sua escolha já será registrada. Fique livre para mudar sua
