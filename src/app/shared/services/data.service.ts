@@ -1,4 +1,4 @@
-import { map, flatMap, mergeMap } from 'rxjs/operators'
+import { map, flatMap, mergeMap } from 'rxjs/operators';
 import { User } from './../model/user';
 import { Shipment } from 'src/app/shared/model/shipment.model';
 import { Injectable, OnDestroy } from '@angular/core';
@@ -31,6 +31,7 @@ export class DataService implements OnDestroy {
           email: userData.email,
           photoURL: userData.photoURL,
           uid: userData.uid,
+          admin: userData.email.startsWith('marcosalpereira@'), // FIX this later
         };
         this.authData.next(user);
       } else {

@@ -1,6 +1,7 @@
 header.main, main, footer.main {
     border: 1px solid navy;
     margin: 0 auto;
+    max-width: 1200px;
 }
 
 header.main .app-title {

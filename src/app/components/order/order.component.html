@@ -21,30 +21,31 @@
 
 <main>
 
-    <p class="previsao">{{lastShipment ? 'Próxima remessa:' + lastShipment.date + ' [' + totalShipmentOrder + ' pacotes]' : 'Nenhuma remessa prevista'}}</p>
-    <section *ngIf="shipmentOrders" class="orders">
-            <ng-container *ngFor="let sh of shipmentOrders">
-                <span class="order" *ngIf="sh?.order?.amount > 0">{{sh.user.displayName}}
-                    <span class="badge">{{sh.order.amount}}</span>
-                </span>
-            </ng-container>
+    <p class="previsao">{{lastShipment ? 'Próxima remessa:' + lastShipment.date : 'Nenhuma remessa disponível'}}</p>
+    <section *ngIf="shipmentOrders && user?.admin" class="orders">
+        <span class="order">Total<span class="badge">{{totalShipmentOrder}}</span></span>
+        <ng-container *ngFor="let sh of shipmentOrders">
+            <span class="order" *ngIf="sh?.order?.amount > 0">{{sh.user.displayName}}
+                <span class="badge">{{sh.order.amount}}</span>
+            </span>
+        </ng-container>
     </section>
 
-    <section *ngIf="user && lastShipment" class="order-amount">
+    <section *ngIf="user && lastShipment?.status === 'OPEN'" class="order-amount">
         <p class="info">Ao selecionar uma das opções abaixo sua escolha já será registrada. Fique livre para mudar sua
             opção a qualquer momento (até o fechamento da remessa). Normalmente, nas sextas-feiras que
             antecedem a entrega a remessa é fechada.
         </p>
-        <div [class.disabled]="!lastShipment?.open" (click)="onClick(0)" [class.selected]="orderAmount == 0"
+        <div (click)="onClick(0)" [class.selected]="orderAmount == 0"
             title="Não vou querer dessa vez">
             <img src="assets/no-thanks.jpeg" alt="Não vou querer dessa vez" class="qtd0">
             <footer>Zero</footer>
         </div>
-        <div [class.disabled]="!lastShipment?.open" (click)="onClick(1)" [class.selected]="orderAmount == 1">
+        <div (click)="onClick(1)" [class.selected]="orderAmount == 1">
             <img src="assets/nuts192.png" title="Quero um pacote" alt="Quero um pacote" class="qtd1">
             <footer>Um Pacote</footer>
         </div>
-        <div [class.disabled]="!lastShipment?.open" (click)="onClick(2)" [class.selected]="orderAmount == 2">
+        <div (click)="onClick(2)" [class.selected]="orderAmount == 2">
             <img src="assets/nuts192.png" title="Quero dois pacotes" alt="Quero dois pacotes" class="qtd2">
             <footer>Dois Pacotes</footer>
         </div>

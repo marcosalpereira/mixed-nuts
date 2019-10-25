@@ -22,6 +22,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   orderSub: Subscription;
   shipmentOrders: ShipmentOrder[];
   totalShipmentOrder: number;
+  shipmentOrdersSub: Subscription;
 
   constructor(private dataService: DataService) { }
 
@@ -43,9 +44,9 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.lastShipmentSub = this.dataService
       .shipments$()
       .subscribe(shipments => {
-        this.lastShipment = shipments.find(shipment => shipment.open);
+        this.lastShipment = shipments.find(shipment => shipment.status === 'OPEN' || shipment.status === 'BUYING');
         if (this.lastShipment) {
-          this.dataService.shipmentOrders$(this.lastShipment.id).subscribe(
+          this.shipmentOrdersSub = this.dataService.shipmentOrders$(this.lastShipment.id).subscribe(
             shipmentsOrders => {
               this.shipmentOrders = shipmentsOrders;
               this.totalShipmentOrder = 0;
