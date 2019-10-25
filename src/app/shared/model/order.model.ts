@@ -16,6 +16,6 @@ export interface Order {
 }
 
 export interface ShipmentOrder {
-    user: User;
-    order: Order;
+    user?: User;
+    order?: Order;
 }

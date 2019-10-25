@@ -6,7 +6,8 @@ import { auth } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import {
   AngularFirestore,
-  AngularFirestoreDocument
+  AngularFirestoreDocument,
+  DocumentSnapshot
 } from '@angular/fire/firestore';
 import { Subject, Observable, Subscription, of, forkJoin } from 'rxjs';
 import { OrderStatus, Order, ShipmentOrder } from '../model/order.model';
@@ -32,7 +33,7 @@ export class DataService implements OnDestroy {
           uid: userData.uid,
         };
         this.authData.next(user);
-        this.shipmentOrders$(null);
+        this.shipmentOrders$('eLLf6LpNAp7jtmeGb0ds');
       } else {
         this.authData.next(null);
       }
@@ -87,17 +88,18 @@ export class DataService implements OnDestroy {
     this.fireStore.collection<User>('users')
       .valueChanges().pipe(
         mergeMap(users => {
-          const a = users.map(user => {
-            return this.fireStore.doc<Order>(`users/${user.uid}/orders/${'eLLf6LpNAp7jtmeGb0ds'}`).get();
-          })
-          return forkJoin(...a).pipe(
-            map(o => {
-              users.forEach((ori, index) => {
-                ori['data'] = o[index].data();
+          const orderObservable = users.map(user => {
+            return this.fireStore.doc<Order>(`users/${user.uid}/orders/${shipmentId}`).get();
+          });
+          return forkJoin<DocumentSnapshot<Order>>(...orderObservable).pipe(
+            map(ordersDocSnapshot => {
+              return users.map((user, index) => {
+                return {
+                  user, order: ordersDocSnapshot[index].data()
+                };
               });
-              return users;
             })
-          )
+          );
         })
       ).subscribe(o => console.log('o', o));
 
