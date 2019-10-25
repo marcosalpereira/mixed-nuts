@@ -1,13 +1,14 @@
+import { map, flatMap, mergeMap } from 'rxjs/operators'
+import { User } from './../model/user';
 import { Shipment } from 'src/app/shared/model/shipment.model';
 import { Injectable, OnDestroy } from '@angular/core';
-import { User } from '../model/user';
 import { auth } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import {
   AngularFirestore,
   AngularFirestoreDocument
 } from '@angular/fire/firestore';
-import { Subject, Observable, Subscription } from 'rxjs';
+import { Subject, Observable, Subscription, of, forkJoin } from 'rxjs';
 import { OrderStatus, Order, ShipmentOrder } from '../model/order.model';
 
 @Injectable({
@@ -31,10 +32,12 @@ export class DataService implements OnDestroy {
           uid: userData.uid,
         };
         this.authData.next(user);
+        this.shipmentOrders$(null);
       } else {
         this.authData.next(null);
       }
     });
+
   }
 
   ngOnDestroy() {
@@ -48,20 +51,59 @@ export class DataService implements OnDestroy {
   }
 
   userOrders$(uid: string): Observable<Order[]> {
-    const userOrders: ShipmentOrder[] = [];
-    this.shipments$().subscribe(
-      shipment => {
-
-      }
-    )
-    const ref = this.fireStore.collectionGroup('orders', o => o.where('uid', '==', uid));
-    return ref.get().llection<Order>('orders').valueChanges();
+    const userDoc = this.fireStore.collection('users').doc(uid);
+    return userDoc.collection<Order>('orders').valueChanges();
   }
 
-  shipmentOrders$(shipmentId: string): Observable<Order[]> {
-    const ref = this.fireStore.collection('remessas').doc(shipmentId);
-    return ref.collection<Order>('orders').valueChanges();
+  // private sub = new Subject<ShipmentOrder>();
+  // sub$ = this.sub.asObservable();
+
+  // shipmentOrders$(shipmentId: string): Observable<ShipmentOrder> {
+  //   this.fireStore.collection<User>('users').valueChanges().toPromise().then(
+  //     users => {
+  //       users.forEach(user => {
+  //         this.fireStore.doc(
+  //           `users/${user.uid}/orders/${shipmentId}`
+  //         ).get().toPromise().then(order => {
+  //           const so = {order: order.data() as Order, user};
+  //           this.sub.next(so);
+  //         });
+  //       });
+  //     }
+  //   );
+  //   return this.sub$;
+  // }
+
+  shipmentOrders$(shipmentId: string) {
+    // this.fireStore.collection<User>('users')
+    //   .valueChanges().pipe(flatMap(us => us.map( async u => {
+    //     const  o = await this.fireStore.doc(`users/${u.uid}/orders/${'eLLf6LpNAp7jtmeGb0ds'}`)
+    //       .get().toPromise();
+    //       return {order: o.data() as Order, user: u};
+
+    //   })))
+    //   .subscribe(o => console.log('o', o));
+
+    this.fireStore.collection<User>('users')
+      .valueChanges().pipe(
+        mergeMap(users => {
+          const a = users.map(user => {
+            return this.fireStore.doc<Order>(`users/${user.uid}/orders/${'eLLf6LpNAp7jtmeGb0ds'}`).get();
+          })
+          return forkJoin(...a).pipe(
+            map(o => {
+              users.forEach((ori, index) => {
+                ori['data'] = o[index].data();
+              });
+              return users;
+            })
+          )
+        })
+      ).subscribe(o => console.log('o', o));
+
+
   }
+
 
   googleAuth(): void {
     this.authLogin(new auth.GoogleAuthProvider());
@@ -99,11 +141,13 @@ export class DataService implements OnDestroy {
 
   placeOrder(user: User, shipment: Shipment, orderAmount: number) {
     const order: Order = {
+      shipmentUid: shipment.id,
+      shipmentDate: shipment.date,
       amount: orderAmount,
       status: OrderStatus.PENDING
     };
     const ref: AngularFirestoreDocument<any> = this.fireStore.doc(
-      `remessas/${shipment.id}/orders/${user.uid}`
+      `users/${user.uid}/orders/${shipment.id}`
     );
     ref.set(order, { merge: true });
   }

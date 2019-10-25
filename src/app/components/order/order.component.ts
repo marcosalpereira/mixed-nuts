@@ -60,7 +60,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     } else {
       if (this.orders) {
         const order = this.orders.find(
-          o => o.shipmentUid === this.lastShipment.uid
+          o => o.shipmentUid === this.lastShipment.id
         );
         this.orderAmount = order ? order.amount : 0;
       }
