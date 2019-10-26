@@ -25,3 +25,7 @@ html {
 p {
     margin: 0;
 }
+
+.clickable {
+  cursor: pointer;
+}

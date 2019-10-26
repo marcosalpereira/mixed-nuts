@@ -74,16 +74,33 @@ main .orders {
     display: block;
 }
 
+.order.PENDING {
+    background-color: #fff;
+}
+
+.order.DELIVERED {
+    background-color: orange
+}
+
+.order.PAID {
+    background-color: green;
+}
+
 main .orders .order {
     display: inline-block;
     padding: 5px 40px 5px 5px;
     position: relative;
     border-radius: 5px;
     box-shadow: 2px 2px 4px #242121a2;
-    margin: 0 2px;
+    margin: 2px 2px;
     text-align: left;
     font-size: 70%;
     display: inline-block;
+}
+
+main .orders .order.total {
+    background-color: lightgrey;
+    padding-right: 50px;
 }
 
 main .orders .order .badge {

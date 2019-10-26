@@ -3,7 +3,7 @@ import { User } from 'src/app/shared/model/user';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/shared/services/data.service';
 import { Shipment } from 'src/app/shared/model/shipment.model';
-import { Order, ShipmentOrder } from 'src/app/shared/model/order.model';
+import { Order, ShipmentOrder, OrderStatus } from 'src/app/shared/model/order.model';
 
 @Component({
   selector: 'app-order',
@@ -36,6 +36,19 @@ export class OrderComponent implements OnInit, OnDestroy {
         this.orders = [];
       }
     });
+  }
+
+  changeOrderStatus(user: User, order: Order, event: MouseEvent) {
+    if (event.altKey) {
+      if (order.status === OrderStatus.PENDING) {
+        order.status = OrderStatus.DELIVERED;
+      } else if  (order.status === OrderStatus.DELIVERED) {
+        order.status = OrderStatus.PAID;
+      } else {
+        order.status = OrderStatus.PENDING;
+      }
+      this.dataService.updateOrderStatus(user.uid, order.shipmentUid, order.status);
+    }
   }
 
   private getLastShipment() {

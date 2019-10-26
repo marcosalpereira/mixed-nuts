@@ -4,13 +4,13 @@
         <div class="user" [title]="user.email">
             {{user.displayName ? user.displayName : user.email}}
         </div>
-        <div title="Sair" (click)="logout()" class="photo" style="cursor: pointer">
+        <div title="Sair" (click)="logout()" class="photo clickable">
             <img title="Sair" src="{{(user.photoURL) ? user.photoURL : '/assets/dummy-user.png'}}">
             <footer>Sair</footer>
         </div>
     </div>
     <div class="user-container" *ngIf="!user">
-        <div class="user" style="cursor: pointer" (click)="login()">Clique para entrar
+        <div class="user clickable" (click)="login()">Clique para entrar
             usando conta do Google
         </div>
         <div class="photo">
@@ -22,11 +22,14 @@
 <main>
 
     <p class="previsao">{{lastShipment ? 'Próxima remessa:' + lastShipment.date : 'Nenhuma remessa disponível'}}</p>
+
     <section *ngIf="shipmentOrders && user?.admin" class="orders">
-        <span class="order">Total<span class="badge">{{totalShipmentOrder}}</span></span>
-        <ng-container *ngFor="let sh of shipmentOrders">
-            <span class="order" *ngIf="sh?.order?.amount > 0">{{sh.user.displayName}}
-                <span class="badge">{{sh.order.amount}}</span>
+        <span class="order total">Total<span class="badge">{{totalShipmentOrder}}</span></span>
+        <ng-container *ngFor="let shipmentOrder of shipmentOrders">
+            <span (click)="changeOrderStatus(shipmentOrder.user, shipmentOrder.order, $event)"
+                    class="order clickable {{shipmentOrder.order.status}}"
+                    *ngIf="shipmentOrder?.order?.amount > 0">{{shipmentOrder.user.displayName}}
+                <span class="badge">{{shipmentOrder.order.amount}}</span>
             </span>
         </ng-container>
     </section>
@@ -36,16 +39,16 @@
             opção a qualquer momento (até o fechamento da remessa). Normalmente, nas sextas-feiras que
             antecedem a entrega a remessa é fechada.
         </p>
-        <div (click)="onClick(0)" [class.selected]="orderAmount == 0"
+        <div (click)="onClick(0)" class="clickable" [class.selected]="orderAmount == 0"
             title="Não vou querer dessa vez">
             <img src="assets/no-thanks.jpeg" alt="Não vou querer dessa vez" class="qtd0">
             <footer>Zero</footer>
         </div>
-        <div (click)="onClick(1)" [class.selected]="orderAmount == 1">
+        <div (click)="onClick(1)" class="clickable" [class.selected]="orderAmount == 1">
             <img src="assets/nuts192.png" title="Quero um pacote" alt="Quero um pacote" class="qtd1">
             <footer>Um Pacote</footer>
         </div>
-        <div (click)="onClick(2)" [class.selected]="orderAmount == 2">
+        <div (click)="onClick(2)" class="clickable" [class.selected]="orderAmount == 2">
             <img src="assets/nuts192.png" title="Quero dois pacotes" alt="Quero dois pacotes" class="qtd2">
             <footer>Dois Pacotes</footer>
         </div>

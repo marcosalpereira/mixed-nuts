@@ -57,7 +57,7 @@ export class DataService implements OnDestroy {
   }
 
   shipmentOrders$(shipmentId: string): Observable<ShipmentOrder[]> {
-    return this.fireStore.collection<User>('users')
+    return this.fireStore.collection<User>('users', qfn => qfn.orderBy('displayName', 'asc'))
       .valueChanges().pipe(
         mergeMap(users => {
           const orderObservable = users.map(user => {
@@ -122,6 +122,13 @@ export class DataService implements OnDestroy {
       `users/${user.uid}/orders/${shipment.id}`
     );
     ref.set(order, { merge: true });
+  }
+
+  updateOrderStatus(uid: string, shipmentUid: string, status: OrderStatus) {
+    const ref: AngularFirestoreDocument<any> = this.fireStore.doc(
+      `users/${uid}/orders/${shipmentUid}`
+    );
+    ref.set({status}, { merge: true });
   }
 
 }
