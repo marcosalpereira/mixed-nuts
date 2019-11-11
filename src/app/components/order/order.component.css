@@ -64,7 +64,7 @@ main p.info {
     opacity: 0.9;
 }
 
-main p.previsao {
+main p.remessa {
     font-weight: bold;
 }
 
@@ -74,15 +74,11 @@ main .orders {
     display: block;
 }
 
-.order.PENDING {
-    background-color: #fff;
-}
-
-.order.DELIVERED {
+.order.DELIVERED .badge{
     background-color: orange
 }
 
-.order.PAID {
+.order.PAID .badge{
     background-color: green;
 }
 
@@ -101,10 +97,6 @@ main .orders .order {
 main .orders .order.total {
     background-color: lightgrey;
     padding-right: 50px;
-}
-
-main .orders .order .badge {
-    opacity: .5;
 }
 
 .order-amount img {

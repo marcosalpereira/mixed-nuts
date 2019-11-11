@@ -39,7 +39,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   }
 
   changeOrderStatus(user: User, order: Order, event: MouseEvent) {
-    if (event.altKey) {
+
       if (order.status === OrderStatus.PENDING) {
         order.status = OrderStatus.DELIVERED;
       } else if  (order.status === OrderStatus.DELIVERED) {
@@ -48,7 +48,7 @@ export class OrderComponent implements OnInit, OnDestroy {
         order.status = OrderStatus.PENDING;
       }
       this.dataService.updateOrderStatus(user.uid, order.shipmentUid, order.status);
-    }
+
   }
 
   private getLastShipment() {

@@ -26,14 +26,10 @@ export class DataService implements OnDestroy {
   ) {
     this.authStateSub = this.fireAuth.authState.subscribe(userData => {
       if (userData) {
-        const user: User = {
-          displayName: userData.displayName,
-          email: userData.email,
-          photoURL: userData.photoURL,
-          uid: userData.uid,
-          admin: userData.email.startsWith('marcosalpereira@'), // FIX this later
-        };
-        this.authData.next(user);
+        this.getUserData(userData.uid).then(user => {
+          console.log({user});
+          this.authData.next(user);
+        });
       } else {
         this.authData.next(null);
       }
@@ -45,6 +41,13 @@ export class DataService implements OnDestroy {
     if (this.authStateSub) {
       this.authStateSub.unsubscribe();
     }
+  }
+
+  private async getUserData(uid: string): Promise<User> {
+    return this.fireStore.doc(`users/${uid}`)
+      .get().pipe(
+        map(snapshot => snapshot.data() as User)
+      ).toPromise();
   }
 
   shipments$(): Observable<Shipment[]> {
@@ -108,7 +111,7 @@ export class DataService implements OnDestroy {
       displayName: fbuser.displayName,
       photoURL: fbuser.photoURL,
     };
-    ref.set(user);
+    ref.set(user, {merge: true});
   }
 
   placeOrder(user: User, shipment: Shipment, orderAmount: number) {

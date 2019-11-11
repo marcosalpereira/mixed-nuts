@@ -9,7 +9,7 @@
             <footer>Sair</footer>
         </div>
     </div>
-    <div class="user-container" *ngIf="!user">
+    <div class="user-container clickable" *ngIf="!user" (click)="login()">
         <div class="user clickable" (click)="login()">Clique para entrar
             usando conta do Google
         </div>
@@ -21,7 +21,10 @@
 
 <main>
 
-    <p class="previsao">{{lastShipment ? 'Próxima remessa:' + lastShipment.date : 'Nenhuma remessa disponível'}}</p>
+    <p class="remessa">
+        {{lastShipment?.status === 'OPEN' ? 'Próxima' : ''}}
+        {{lastShipment ? ' Remessa:' + lastShipment.date : 'Nenhuma remessa disponível'}}
+    </p>
 
     <section *ngIf="shipmentOrders && user?.admin" class="orders">
         <span class="order total">Total<span class="badge">{{totalShipmentOrder}}</span></span>
