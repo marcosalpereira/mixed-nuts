@@ -21,10 +21,24 @@
 
 <main>
 
-    <p class="remessa">
-        {{lastShipment?.status === 'OPEN' ? 'Próxima' : ''}}
-        {{lastShipment ? ' Remessa:' + lastShipment.date : 'Nenhuma remessa disponível'}}
-    </p>
+    <section class="shipments">
+        <p>Remessas</p>
+        <span class="shipment" *ngFor="let shipment of shipments">
+            {{shipment.date}}-{{shipment.status | shipmentStatus}}
+            <span class="badge">{{order.amount}}</span>
+        </span>
+        <p class="shipment">
+            {{activeShipment?.status === 'OPEN' ? 'Próxima' : ''}}
+            {{activeShipment ? ' Remessa:' + activeShipment.date : 'Nenhuma remessa disponível'}}
+        </p>
+    </section>
+
+    <section class="history">
+            <p>Histórico de pedidos</p>
+            <span class="order" *ngFor="let order of orders">{{order.shipmentDate}}
+                <span class="badge">{{order.amount}}</span>
+            </span>
+        </section>
 
     <section *ngIf="shipmentOrders && user?.admin" class="orders">
         <span class="order total">Total<span class="badge">{{totalShipmentOrder}}</span></span>
@@ -37,7 +51,7 @@
         </ng-container>
     </section>
 
-    <section *ngIf="user && lastShipment?.status === 'OPEN'" class="order-amount">
+    <section *ngIf="user && activeShipment?.status === 'OPEN'" class="order-amount">
         <p class="info">Ao selecionar uma das opções abaixo sua escolha já será registrada. Fique livre para mudar sua
             opção a qualquer momento (até o fechamento da remessa). Normalmente, nas sextas-feiras que
             antecedem a entrega a remessa é fechada.
@@ -56,16 +70,6 @@
             <footer>Dois Pacotes</footer>
         </div>
     </section>
-
-    <section class="history">
-        <p>Histórico de pedidos</p>
-        <div class="history">
-            <span class="order" *ngFor="let order of orders">{{order.shipmentDate}}
-                <span class="badge">{{order.amount}}</span>
-            </span>
-        </div>
-    </section>
-
 </main>
 <footer class="main">
     <small>&copy; 2019 Marcosoft, Inc.</small>

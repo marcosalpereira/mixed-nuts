@@ -17,8 +17,9 @@ export class OrderComponent implements OnInit, OnDestroy {
   orderAmount = 0;
   authDataSub: Subscription;
 
-  lastShipmentSub: Subscription;
-  lastShipment: Shipment;
+  shipmentsSub: Subscription;
+  activeShipment: Shipment;
+  shipments: Shipment[];
   orderSub: Subscription;
   shipmentOrders: ShipmentOrder[];
   totalShipmentOrder: number;
@@ -30,8 +31,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.authDataSub = this.dataService.authData$.subscribe(user => {
       this.user = user;
       if (user) {
-        this.getOrders(user);
-        this.getLastShipment();
+        this.getShipments();
       } else {
         this.orders = [];
       }
@@ -51,51 +51,63 @@ export class OrderComponent implements OnInit, OnDestroy {
 
   }
 
-  private getLastShipment() {
-    this.lastShipmentUnsubscribe();
-
-    this.lastShipmentSub = this.dataService
+  private getShipments() {
+    this.shipmentsUnsubscribe();
+    this.shipmentsSub = this.dataService
       .shipments$()
       .subscribe(shipments => {
-        this.lastShipment = shipments.find(shipment => shipment.status === 'OPEN' || shipment.status === 'BUYING');
-        if (this.lastShipment) {
-          this.shipmentOrdersSub = this.dataService.shipmentOrders$(this.lastShipment.id).subscribe(
-            shipmentsOrders => {
-              this.shipmentOrders = shipmentsOrders;
-              this.totalShipmentOrder = 0;
-              shipmentsOrders.forEach(so => this.totalShipmentOrder += so.order ? so.order.amount : 0);
-            });
-        }
-        this.updateState();
+        this.shipments = shipments;
+        this.selectShipment(shipments.find(shipment =>
+          shipment.status === 'OPEN' ||
+          shipment.status === 'BUYING'));
       });
   }
 
-  getOrders(user: User) {
-    this.ordersUnsubscribe();
-    this.orderSub = this.dataService.userOrders$(user.uid).subscribe(orders => {
-      this.orders = orders;
-      this.updateState();
-    });
+  onShipmentClick(shipment: Shipment) {
+    this.selectShipment(shipment);
   }
 
-  updateState(): void {
-    if (!this.lastShipment || !this.orders) {
-      setTimeout(() => this.updateState(), 500);
-    } else {
-      if (this.orders) {
-        const order = this.orders.find(
-          o => o.shipmentUid === this.lastShipment.id
-        );
-        this.orderAmount = order ? order.amount : 0;
-      }
+  private selectShipment(shipment: Shipment) {
+    this.activeShipment = shipment;
+    this.shipmentOrders = null;
+    this.totalShipmentOrder = 0;
+    if (shipment) {
+      const shipmentOrdersSub = this.dataService.shipmentOrders$(this.activeShipment.id)
+        .subscribe(shipmentsOrders => {
+          this.shipmentOrders = shipmentsOrders;
+          shipmentsOrders.forEach(so => this.totalShipmentOrder += so.order ? so.order.amount : 0);
+          shipmentOrdersSub.unsubscribe();
+        }
+      );
     }
   }
+
+  // private getOrdersHistory(user: User) {
+  //   this.ordersUnsubscribe();
+  //   this.orderSub = this.dataService.userOrders$(user.uid).subscribe(orders => {
+  //     this.orders = orders;
+  //     this.updateState();
+  //   });
+  // }
+
+  // updateState(): void {
+  //   if (!this.activeShipment || !this.orders) {
+  //     setTimeout(() => this.updateState(), 500);
+  //   } else {
+  //     if (this.orders) {
+  //       const order = this.orders.find(
+  //         o => o.shipmentUid === this.activeShipment.id
+  //       );
+  //       this.orderAmount = order ? order.amount : 0;
+  //     }
+  //   }
+  // }
 
   ngOnDestroy() {
     if (this.authDataSub) {
       this.authDataSub.unsubscribe();
     }
-    this.lastShipmentUnsubscribe();
+    this.shipmentsUnsubscribe();
     this.ordersUnsubscribe();
   }
 
@@ -105,15 +117,15 @@ export class OrderComponent implements OnInit, OnDestroy {
     }
   }
 
-  private lastShipmentUnsubscribe() {
-    if (this.lastShipmentSub) {
-      this.lastShipmentSub.unsubscribe();
+  private shipmentsUnsubscribe() {
+    if (this.shipmentsSub) {
+      this.shipmentsSub.unsubscribe();
     }
   }
 
   onClick(amount: number) {
     this.orderAmount = amount;
-    this.dataService.placeOrder(this.user, this.lastShipment, this.orderAmount);
+    this.dataService.placeOrder(this.user, this.activeShipment, this.orderAmount);
   }
 
   login() {
