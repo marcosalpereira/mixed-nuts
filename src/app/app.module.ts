@@ -9,11 +9,13 @@ import { AngularFireAuthModule } from '@angular/fire/auth';
 import { environment } from '../environments/environment';
 import { OrderComponent } from './components/order/order.component';
 import { FormsModule } from '@angular/forms';
+import { ShipmentStatusPipe } from './shared/pipes/shipment-status.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     OrderComponent,
+    ShipmentStatusPipe,
   ],
   imports: [
     BrowserModule,

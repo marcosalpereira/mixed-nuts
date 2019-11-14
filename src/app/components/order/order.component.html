@@ -24,7 +24,7 @@
     <section class="shipments">
         <p>Remessas</p>
         <span class="shipment" *ngFor="let shipment of shipments">
-            {{shipment.date}}-{{shipment.status | shipmentStatus}}
+            {{shipment.date}} - {{shipment.status | shipmentStatus}}
             <span class="badge">{{order.amount}}</span>
         </span>
         <p class="shipment">
@@ -62,11 +62,11 @@
             <footer>Zero</footer>
         </div>
         <div (click)="onClick(1)" class="clickable" [class.selected]="orderAmount == 1">
-            <img src="assets/nuts192.png" title="Quero um pacote" alt="Quero um pacote" class="qtd1">
+            <img src="assets/nuts-1.jpeg" title="Quero um pacote" alt="Quero um pacote" class="qtd1">
             <footer>Um Pacote</footer>
         </div>
         <div (click)="onClick(2)" class="clickable" [class.selected]="orderAmount == 2">
-            <img src="assets/nuts192.png" title="Quero dois pacotes" alt="Quero dois pacotes" class="qtd2">
+            <img src="assets/nuts-2.jpeg" title="Quero dois pacotes" alt="Quero dois pacotes" class="qtd2">
             <footer>Dois Pacotes</footer>
         </div>
     </section>
