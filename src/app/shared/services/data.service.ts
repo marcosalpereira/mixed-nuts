@@ -129,7 +129,7 @@ export class DataService implements OnDestroy {
 
   updateOrderStatus(uid: string, shipmentUid: string, status: OrderStatus) {
     const ref: AngularFirestoreDocument<any> = this.fireStore.doc(
-      `users/${uid}/orders/${shipmentUid}`
+      `remessas/${shipmentUid}/orders/${shipmentUid}`
     );
     ref.set({status}, { merge: true });
   }

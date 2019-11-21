@@ -3,7 +3,7 @@ import { User } from 'src/app/shared/model/user';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/shared/services/data.service';
 import { Shipment } from 'src/app/shared/model/shipment.model';
-import { Order, ShipmentOrder, OrderStatus } from 'src/app/shared/model/order.model';
+import { Order, OrderStatus } from 'src/app/shared/model/order.model';
 
 @Component({
   selector: 'app-order',
@@ -21,7 +21,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   activeShipment: Shipment;
   shipments: Shipment[];
   orderSub: Subscription;
-  shipmentOrders: ShipmentOrder[];
+  shipmentOrders: Order[];
   totalShipmentOrder: number;
   shipmentOrdersSub: Subscription;
 
@@ -38,8 +38,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     });
   }
 
-  changeOrderStatus(user: User, order: Order, event: MouseEvent) {
-
+  changeOrderStatus(order: Order) {
       if (order.status === OrderStatus.PENDING) {
         order.status = OrderStatus.DELIVERED;
       } else if  (order.status === OrderStatus.DELIVERED) {
@@ -47,8 +46,7 @@ export class OrderComponent implements OnInit, OnDestroy {
       } else {
         order.status = OrderStatus.PENDING;
       }
-      this.dataService.updateOrderStatus(user.uid, order.shipmentUid, order.status);
-
+      this.dataService.updateOrderStatus(order.uid, this.activeShipment.id, order.status);
   }
 
   private getShipments() {
@@ -123,7 +121,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     }
   }
 
-  onClick(amount: number) {
+  onOrderClick(amount: number) {
     this.orderAmount = amount;
     this.dataService.placeOrder(this.user, this.activeShipment, this.orderAmount);
   }
