@@ -13,13 +13,12 @@ import { Order, OrderStatus } from 'src/app/shared/model/order.model';
 export class OrderComponent implements OnInit, OnDestroy {
   appTitle = 'Mixed Nuts Ordering System';
   user: User;
-  orders: Order[];
   orderAmount = 0;
   authDataSub: Subscription;
 
   shipmentsSub: Subscription;
   activeShipment: Shipment;
-  shipments: Shipment[];
+  shipments: Shipment[] = [];
   orderSub: Subscription;
   shipmentOrders: Order[];
   totalShipmentOrder: number;
@@ -30,11 +29,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.authDataSub = this.dataService.authData$.subscribe(user => {
       this.user = user;
-      if (user) {
-        this.getShipments();
-      } else {
-        this.orders = [];
-      }
+      this.getShipments();
     });
   }
 
@@ -70,36 +65,21 @@ export class OrderComponent implements OnInit, OnDestroy {
     this.shipmentOrders = null;
     this.totalShipmentOrder = 0;
     if (shipment) {
-      const shipmentOrdersSub = this.dataService.shipmentOrders$(this.activeShipment.id)
-        .subscribe(shipmentsOrders => {
-          this.shipmentOrders = shipmentsOrders;
-          shipmentsOrders.forEach(so => this.totalShipmentOrder += so.order ? so.order.amount : 0);
-          shipmentOrdersSub.unsubscribe();
+      this.shipmentOrdersSubUnsubcribe();
+      this.shipmentOrdersSub = this.dataService.shipmentOrders$(this.activeShipment.id)
+        .subscribe(orders => {
+          this.shipmentOrders = orders;
+          orders.forEach(order => this.totalShipmentOrder += order.amount);
         }
       );
     }
   }
 
-  // private getOrdersHistory(user: User) {
-  //   this.ordersUnsubscribe();
-  //   this.orderSub = this.dataService.userOrders$(user.uid).subscribe(orders => {
-  //     this.orders = orders;
-  //     this.updateState();
-  //   });
-  // }
-
-  // updateState(): void {
-  //   if (!this.activeShipment || !this.orders) {
-  //     setTimeout(() => this.updateState(), 500);
-  //   } else {
-  //     if (this.orders) {
-  //       const order = this.orders.find(
-  //         o => o.shipmentUid === this.activeShipment.id
-  //       );
-  //       this.orderAmount = order ? order.amount : 0;
-  //     }
-  //   }
-  // }
+  private shipmentOrdersSubUnsubcribe() {
+    if (this.shipmentOrdersSub) {
+      this.shipmentOrdersSub.unsubscribe();
+    }
+  }
 
   ngOnDestroy() {
     if (this.authDataSub) {
@@ -107,6 +87,7 @@ export class OrderComponent implements OnInit, OnDestroy {
     }
     this.shipmentsUnsubscribe();
     this.ordersUnsubscribe();
+    this.shipmentOrdersSubUnsubcribe();
   }
 
   private ordersUnsubscribe() {

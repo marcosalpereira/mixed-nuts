@@ -36,10 +36,12 @@
             </span>
             <ng-container *ngIf="user?.admin">
                 <span *ngFor="let order of shipmentOrders"
-                        (dblclick)="changeOrderStatus(order)"
-                        class="order clickable {{order.status}}"
+                        class="order {{order.status}}"
                         >{{order._userName}}
-                    <span class="badge">{{order.amount}}</span>
+                    <span class="badge clickable"
+                        (dblclick)="changeOrderStatus(order)"
+
+                        >{{order.amount}}</span>
                 </span>
             </ng-container>
             <ng-container *ngIf="!user?.admin">
