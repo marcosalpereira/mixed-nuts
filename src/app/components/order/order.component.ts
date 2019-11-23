@@ -23,6 +23,7 @@ export class OrderComponent implements OnInit, OnDestroy {
   shipmentOrders: Order[];
   totalShipmentOrder: number;
   shipmentOrdersSub: Subscription;
+  itemRecemSelecionado = false;
 
   constructor(private dataService: DataService) { }
 
@@ -69,6 +70,7 @@ export class OrderComponent implements OnInit, OnDestroy {
       this.shipmentOrdersSub = this.dataService.shipmentOrders$(this.activeShipment.id)
         .subscribe(orders => {
           this.shipmentOrders = orders;
+          this.totalShipmentOrder = 0;
           orders.forEach(order => this.totalShipmentOrder += order.amount);
         }
       );
@@ -105,6 +107,8 @@ export class OrderComponent implements OnInit, OnDestroy {
   onOrderClick(amount: number) {
     this.orderAmount = amount;
     this.dataService.placeOrder(this.user, this.activeShipment, this.orderAmount);
+    this.itemRecemSelecionado = true;
+    setTimeout( () => this.itemRecemSelecionado = false, 20000);
   }
 
   login() {

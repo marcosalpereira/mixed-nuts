@@ -21,27 +21,22 @@
 
 <main>
 
-    <section class="shipments">
-        <p>Remessas</p>
+    <section class="card shipments">
+        <header>Remessas</header>
         <div class="shipments">
-            <span *ngFor="let shipment of shipments"
-                    (click)="onShipmentClick(shipment)"
-                    class="shipment clickable">
+            <span *ngFor="let shipment of shipments" (click)="onShipmentClick(shipment)"
+                class="shipment info clickable"
+                [class.selected]="shipment.id === activeShipment?.id">
                 {{shipment.date}} - {{shipment.status | shipmentStatus}}
             </span>
         </div>
         <div *ngIf="shipmentOrders" class="orders">
-            <span *ngIf="user?.admin" class="order total">Total
+            <span *ngIf="user?.admin" class="info order total">Total
                 <span class="badge">{{totalShipmentOrder}}</span>
             </span>
             <ng-container *ngIf="user?.admin">
-                <span *ngFor="let order of shipmentOrders"
-                        class="order {{order.status}}"
-                        >{{order._userName}}
-                    <span class="badge clickable"
-                        (dblclick)="changeOrderStatus(order)"
-
-                        >{{order.amount}}</span>
+                <span *ngFor="let order of shipmentOrders" class="info order {{order.status}}">{{order._userName}}
+                    <span class="badge clickable" (dblclick)="changeOrderStatus(order)">{{order.amount}}</span>
                 </span>
             </ng-container>
             <ng-container *ngIf="!user?.admin">
@@ -50,21 +45,26 @@
         </div>
     </section>
 
-    <section *ngIf="user && activeShipment?.status === 'OPEN'" class="order-amount">
-        <div (click)="onOrderClick(0)" class="clickable" [class.selected]="orderAmount == 0"
-            title="Não vou querer dessa vez">
-            <img src="assets/no-thanks.jpeg" alt="Não vou querer dessa vez" class="qtd0">
-            <footer>Zero</footer>
+    <section *ngIf="user && activeShipment?.status === 'OPEN'" class="card order-amount">
+        <header>Pedido</header>
+        <div id="order-selection">
+            <div (click)="onOrderClick(0)" class="clickable" [class.selected]="orderAmount == 0"
+                title="Não vou querer dessa vez">
+                <img src="assets/no-thanks.jpeg" alt="Não vou querer dessa vez" class="qtd0">
+                <footer>Zero</footer>
+            </div>
+            <div (click)="onOrderClick(1)" class="clickable" [class.selected]="orderAmount == 1">
+                <img src="assets/nuts-1.jpeg" title="Quero um pacote" alt="Quero um pacote" class="qtd1">
+                <footer>Um Pacote</footer>
+            </div>
+            <div (click)="onOrderClick(2)" class="clickable" [class.selected]="orderAmount == 2">
+                <img src="assets/nuts-2.jpeg" title="Quero dois pacotes" alt="Quero dois pacotes" class="qtd2">
+                <footer>Dois Pacotes</footer>
+            </div>
+            <div *ngIf="itemRecemSelecionado" class="message">Pedido selecionado com sucesso. Fique livre para mudar sua
+                opção a qualquer momento até o fechamento da remessa. Normalmente, nas sextas-feiras que antecedem a
+                entrega a remessa é fechada.</div>
         </div>
-        <div (click)="onOrderClick(1)" class="clickable" [class.selected]="orderAmount == 1">
-            <img src="assets/nuts-1.jpeg" title="Quero um pacote" alt="Quero um pacote" class="qtd1">
-            <footer>Um Pacote</footer>
-        </div>
-        <div (click)="onOrderClick(2)" class="clickable" [class.selected]="orderAmount == 2">
-            <img src="assets/nuts-2.jpeg" title="Quero dois pacotes" alt="Quero dois pacotes" class="qtd2">
-            <footer>Dois Pacotes</footer>
-        </div>
-        <div *ngIf="itemRecemSelecionado" class="message">Pedido selecionado com sucesso. Fique livre para mudar sua opção a qualquer momento (até o fechamento da remessa). Normalmente, nas sextas-feiras que antecedem a entrega a remessa é fechada.</div>
     </section>
 </main>
 <footer class="main">
