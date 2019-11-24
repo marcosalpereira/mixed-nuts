@@ -68,7 +68,7 @@ main section.shipments {
     text-align: center;
 }
 
-section.order-amount .selected {
+section.order-amount #order-selection .selected {
     border: 3px solid navy;
     border-radius: 5px;
 }
@@ -147,9 +147,6 @@ section.order-amount .selected {
 }
 
 footer.main {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
     background-color: navy;
     color: white;
     display: flex;
