@@ -35,7 +35,7 @@
                 <span class="badge">{{totalShipmentOrder}}</span>
             </span>
             <ng-container *ngIf="user?.admin">
-                <span *ngFor="let order of shipmentOrders" class="info order {{order.status}}">{{order._userName}}
+                <span *ngFor="let order of shipmentOrders" class="info order {{order.status}}" [title]="order._userName">{{order._userName | shortName}}
                     <span class="badge clickable" (dblclick)="changeOrderStatus(order)">{{order.amount}}</span>
                 </span>
             </ng-container>
@@ -63,7 +63,7 @@
                 <img src="assets/2.jpg" title="Quero dois pacotes" alt="Quero dois pacotes" class="qtd2">
                 <footer>Dois Pacotes</footer>
             </div>
-            <div  class="message">Pedido selecionado com sucesso. Fique livre para mudar sua
+            <div *ngIf="itemRecemSelecionado" (click)="itemRecemSelecionado = false" class="message">Pedido selecionado com sucesso. Fique livre para mudar sua
                 opção a qualquer momento até o fechamento da remessa. Normalmente, nas sextas-feiras que antecedem a
                 entrega a remessa é fechada.</div>
         </div>

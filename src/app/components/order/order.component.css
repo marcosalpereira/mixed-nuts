@@ -83,11 +83,13 @@ section.order-amount #order-selection .selected {
 
 main section.shipments .info.total {
     background-color: lightgrey;
+    padding-right: 60px;
 }
 
 main section.shipments .order {
     position: relative;
     padding-right: 40px;
+    font-size: 120%;
 }
 
 

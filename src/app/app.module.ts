@@ -10,12 +10,14 @@ import { environment } from '../environments/environment';
 import { OrderComponent } from './components/order/order.component';
 import { FormsModule } from '@angular/forms';
 import { ShipmentStatusPipe } from './shared/pipes/shipment-status.pipe';
+import { ShortNamePipe } from './shared/pipes/short-name.pipe';
 
 @NgModule({
   declarations: [
     AppComponent,
     OrderComponent,
     ShipmentStatusPipe,
+    ShortNamePipe,
   ],
   imports: [
     BrowserModule,

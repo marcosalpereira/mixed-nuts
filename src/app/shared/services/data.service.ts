@@ -51,13 +51,14 @@ export class DataService implements OnDestroy {
   }
 
   shipments$(): Observable<Shipment[]> {
-    return this.fireStore.collection<Shipment>('remessas').valueChanges();
+    return this.fireStore.collection<Shipment>('remessas', qfn => qfn.orderBy('order', 'asc'))
+      .valueChanges();
   }
 
 
   shipmentOrders$(shipmentId: string): Observable<Order[]> {
     const shipmentDoc = this.fireStore.collection('remessas').doc(shipmentId);
-    return shipmentDoc.collection<Order>('orders').valueChanges();
+    return shipmentDoc.collection<Order>('orders', qfn => qfn.orderBy('_userName', 'asc')).valueChanges();
   }
 
   googleAuth(): void {
