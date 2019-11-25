@@ -172,5 +172,5 @@ footer.main * {
 }
 
 main {
-    height: calc(100vh - 1.5rem - 3.5rem);
+    min-height: calc(100vh - 1.5rem - 3.5rem);
 }
