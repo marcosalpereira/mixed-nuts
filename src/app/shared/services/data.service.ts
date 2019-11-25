@@ -1,14 +1,16 @@
+import { map, flatMap, mergeMap } from 'rxjs/operators';
+import { User } from './../model/user';
 import { Shipment } from 'src/app/shared/model/shipment.model';
 import { Injectable, OnDestroy } from '@angular/core';
-import { User } from '../model/user';
 import { auth } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
 import {
   AngularFirestore,
-  AngularFirestoreDocument
+  AngularFirestoreDocument,
+  DocumentSnapshot
 } from '@angular/fire/firestore';
-import { Subject, Observable, Subscription } from 'rxjs';
-import { OrderStatus, Order } from '../model/order.model';
+import { Subject, Observable, Subscription, of, forkJoin } from 'rxjs';
+import { OrderStatus, Order} from '../model/order.model';
 
 @Injectable({
   providedIn: 'root'
@@ -24,17 +26,15 @@ export class DataService implements OnDestroy {
   ) {
     this.authStateSub = this.fireAuth.authState.subscribe(userData => {
       if (userData) {
-        const user: User = {
-          displayName: userData.displayName,
-          email: userData.email,
-          photoURL: userData.photoURL,
-          uid: userData.uid,
-        };
-        this.authData.next(user);
+        this.getUserData(userData.uid).then(user => {
+          console.log({user});
+          this.authData.next(user);
+        });
       } else {
         this.authData.next(null);
       }
     });
+
   }
 
   ngOnDestroy() {
@@ -43,13 +43,22 @@ export class DataService implements OnDestroy {
     }
   }
 
-  shipments$(): Observable<Shipment[]> {
-    return this.fireStore.collection<Shipment>('shipments').valueChanges();
+  private async getUserData(uid: string): Promise<User> {
+    return this.fireStore.doc(`users/${uid}`)
+      .get().pipe(
+        map(snapshot => snapshot.data() as User)
+      ).toPromise();
   }
 
-  orders$(userUid: string): Observable<Order[]> {
-    const userDoc = this.fireStore.collection('users').doc(userUid);
-    return userDoc.collection<Order>('orders').valueChanges();
+  shipments$(): Observable<Shipment[]> {
+    return this.fireStore.collection<Shipment>('remessas', qfn => qfn.orderBy('order', 'asc'))
+      .valueChanges();
+  }
+
+
+  shipmentOrders$(shipmentId: string): Observable<Order[]> {
+    const shipmentDoc = this.fireStore.collection('remessas').doc(shipmentId);
+    return shipmentDoc.collection<Order>('orders', qfn => qfn.orderBy('_userName', 'asc')).valueChanges();
   }
 
   googleAuth(): void {
@@ -83,23 +92,27 @@ export class DataService implements OnDestroy {
       displayName: fbuser.displayName,
       photoURL: fbuser.photoURL,
     };
-    ref.set(user);
+    ref.set(user, {merge: true});
   }
 
   placeOrder(user: User, shipment: Shipment, orderAmount: number) {
     const order: Order = {
-      shipmentUid: shipment.uid,
-      shipmentDate: shipment.date,
+      uid: user.uid,
       amount: orderAmount,
-      status: OrderStatus.PENDING
+      status: OrderStatus.PENDING,
+      _userName: user.displayName
     };
     const ref: AngularFirestoreDocument<any> = this.fireStore.doc(
-      `users/${user.uid}/orders/${shipment.uid}`
+      `remessas/${shipment.id}/orders/${user.uid}`
     );
     ref.set(order, { merge: true });
   }
 
-  // getShipmentOrders(shipment: Shipment): Observable<ShipmentOrder> {
-  //   this.fireStore.collection('users')
-  // }
+  updateOrderStatus(uid: string, shipmentId: string, status: OrderStatus) {
+    const ref: AngularFirestoreDocument<any> = this.fireStore.doc(
+      `remessas/${shipmentId}/orders/${uid}`
+    );
+    ref.set({status}, { merge: true });
+  }
+
 }

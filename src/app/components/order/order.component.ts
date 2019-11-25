@@ -3,7 +3,7 @@ import { User } from 'src/app/shared/model/user';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/shared/services/data.service';
 import { Shipment } from 'src/app/shared/model/shipment.model';
-import { Order } from 'src/app/shared/model/order.model';
+import { Order, OrderStatus } from 'src/app/shared/model/order.model';
 
 @Component({
   selector: 'app-order',
@@ -13,57 +13,78 @@ import { Order } from 'src/app/shared/model/order.model';
 export class OrderComponent implements OnInit, OnDestroy {
   appTitle = 'Mixed Nuts Ordering System';
   user: User;
-  orders: Order[];
   orderAmount = 0;
   authDataSub: Subscription;
 
-  lastShipmentSub: Subscription;
-  lastShipment: Shipment;
+  shipmentsSub: Subscription;
+  activeShipment: Shipment;
+  shipments: Shipment[] = [];
   orderSub: Subscription;
+  shipmentOrders: Order[];
+  totalShipmentOrder: number;
+  shipmentOrdersSub: Subscription;
+  itemRecemSelecionado = false;
 
-  constructor(private dataService: DataService) {}
+  constructor(private dataService: DataService) { }
 
   ngOnInit() {
     this.authDataSub = this.dataService.authData$.subscribe(user => {
       this.user = user;
-      if (user) {
-        this.getOrders(user);
-        this.getLastShipment();
-      } else {
-        this.orders = [];
-      }
+      this.getShipments();
     });
   }
 
-  private getLastShipment() {
-    this.lastShipmentUnsubscribe();
+  changeOrderStatus(order: Order) {
+      if (order.status === OrderStatus.PENDING) {
+        order.status = OrderStatus.DELIVERED;
+      } else if  (order.status === OrderStatus.DELIVERED) {
+        order.status = OrderStatus.PAID;
+      } else {
+        order.status = OrderStatus.PENDING;
+      }
+      this.dataService.updateOrderStatus(order.uid, this.activeShipment.id, order.status);
+  }
 
-    this.lastShipmentSub = this.dataService
+  private getShipments() {
+    this.shipmentsUnsubscribe();
+    this.shipmentsSub = this.dataService
       .shipments$()
       .subscribe(shipments => {
-        this.lastShipment = shipments.find(shipment => shipment.open);
-        this.updateState();
+        this.shipments = shipments;
+        this.selectShipment(shipments.find(shipment =>
+          shipment.status === 'OPEN' ||
+          shipment.status === 'BUYING'));
       });
   }
 
-  getOrders(user: User) {
-    this.ordersUnsubscribe();
-    this.orderSub = this.dataService.orders$(user.uid).subscribe(orders => {
-      this.orders = orders;
-      this.updateState();
-    });
+  onShipmentClick(shipment: Shipment) {
+    this.selectShipment(shipment);
   }
 
-  updateState(): void {
-    if (!this.lastShipment || !this.orders) {
-      setTimeout(() => this.updateState(), 500);
-    } else {
-      if (this.orders) {
-        const order = this.orders.find(
-          o => o.shipmentUid === this.lastShipment.uid
-        );
-        this.orderAmount = order ? order.amount : 0;
-      }
+  private selectShipment(shipment: Shipment) {
+    this.activeShipment = shipment;
+    this.shipmentOrders = null;
+    this.totalShipmentOrder = 0;
+    if (shipment) {
+      this.shipmentOrdersSubUnsubcribe();
+      this.shipmentOrdersSub = this.dataService.shipmentOrders$(this.activeShipment.id)
+        .subscribe(orders => {
+          this.shipmentOrders = orders;
+          this.totalShipmentOrder = 0;
+          this.orderAmount = 0;
+          if (orders) {
+            orders.forEach(order => this.totalShipmentOrder += order.amount);
+            const userOrder = orders.find(order => order.uid === this.user.uid);
+            this.orderAmount = userOrder ? userOrder.amount : 0;
+          }
+        }
+      );
+    }
+  }
+
+  private shipmentOrdersSubUnsubcribe() {
+    if (this.shipmentOrdersSub) {
+      this.shipmentOrdersSub.unsubscribe();
     }
   }
 
@@ -71,8 +92,9 @@ export class OrderComponent implements OnInit, OnDestroy {
     if (this.authDataSub) {
       this.authDataSub.unsubscribe();
     }
-    this.lastShipmentUnsubscribe();
+    this.shipmentsUnsubscribe();
     this.ordersUnsubscribe();
+    this.shipmentOrdersSubUnsubcribe();
   }
 
   private ordersUnsubscribe() {
@@ -81,15 +103,17 @@ export class OrderComponent implements OnInit, OnDestroy {
     }
   }
 
-  private lastShipmentUnsubscribe() {
-    if (this.lastShipmentSub) {
-      this.lastShipmentSub.unsubscribe();
+  private shipmentsUnsubscribe() {
+    if (this.shipmentsSub) {
+      this.shipmentsSub.unsubscribe();
     }
   }
 
-  onClick(amount: number) {
+  onOrderClick(amount: number) {
     this.orderAmount = amount;
-    this.dataService.placeOrder(this.user, this.lastShipment, this.orderAmount);
+    this.dataService.placeOrder(this.user, this.activeShipment, this.orderAmount);
+    this.itemRecemSelecionado = true;
+    setTimeout( () => this.itemRecemSelecionado = false, 20000);
   }
 
   login() {

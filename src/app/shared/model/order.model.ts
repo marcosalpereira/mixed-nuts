@@ -6,9 +6,10 @@ export enum OrderStatus {
 }
 
 export interface Order {
-    shipmentUid: string;
+    uid: string;
     amount: number;
     status: OrderStatus;
 
-    shipmentDate: string;
+    _userName: string;
 }
+

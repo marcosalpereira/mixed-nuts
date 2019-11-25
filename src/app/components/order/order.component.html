@@ -1,66 +1,73 @@
-<div class="bg"></div>
 <header class="main">
-    <ng-container *ngIf="user">
+    <div class="app-title">{{appTitle}}</div>
+    <div class="user-container" *ngIf="user">
         <div class="user" [title]="user.email">
             {{user.displayName ? user.displayName : user.email}}
         </div>
-        <div title="Sair" (click)="logout()" class="photo" style="cursor: pointer">
+        <div title="Sair" (click)="logout()" class="photo clickable">
             <img title="Sair" src="{{(user.photoURL) ? user.photoURL : '/assets/dummy-user.png'}}">
             <footer>Sair</footer>
         </div>
-    </ng-container>
-    <ng-container *ngIf="!user">
-        <div class="user" style="cursor: pointer" (click)="login()">Clique para entrar
+    </div>
+    <div class="user-container clickable" *ngIf="!user" (click)="login()">
+        <div class="user clickable" (click)="login()">Clique para entrar
             usando conta do Google
         </div>
         <div class="photo">
             <img src="assets/dummy-user.png" alt="Não Logado">
         </div>
-    </ng-container>
+    </div>
 </header>
 
 <main>
 
-    <p>{{appTitle}}</p>
-
-    <p class="previsao">{{lastShipment ? 'Próxima remessa:' + lastShipment.date : 'Nenhuma remessa prevista'}}</p>
-    <!-- <section *ngIf="user?.admin" class="orders">
-        <ol>
-            <li *ngFor="let order of shipmentOrders | async">
-                {{order.}}
-            </li>
-        </ol>
-    </section> -->
-
-    <section *ngIf="user && lastShipment" class="order-amount">
-        <p class="info">Ao selecionar uma das opções abaixo sua escolha já será registrada. Fique livre para mudar sua
-            opção a qualquer momento (até o fechamento da remessa). Normalmente, nas sextas-feiras que
-            antecedem a entrega a remessa é fechada.
-        </p>
-        <div [class.disabled]="!lastShipment?.open" (click)="onClick(0)" [class.selected]="orderAmount == 0"
-            title="Não vou querer dessa vez">
-            <img src="assets/no-thanks.jpeg" alt="Não vou querer dessa vez" class="qtd0">
-            <footer>Zero</footer>
-        </div>
-        <div [class.disabled]="!lastShipment?.open" (click)="onClick(1)" [class.selected]="orderAmount == 1">
-            <img src="assets/nuts192.png" title="Quero um pacote" alt="Quero um pacote" class="qtd1">
-            <footer>Um Pacote</footer>
-        </div>
-        <div [class.disabled]="!lastShipment?.open" (click)="onClick(2)" [class.selected]="orderAmount == 2">
-            <img src="assets/nuts192.png" title="Quero dois pacotes" alt="Quero dois pacotes" class="qtd2">
-            <footer>Dois Pacotes</footer>
-        </div>
-    </section>
-
-    <section class="history">
-        <p>Histórico de pedidos</p>
-        <div class="history">
-            <span class="order" *ngFor="let order of orders">{{order.shipmentDate}}
-                <span class="badge">{{order.amount}}</span>
+    <section class="card shipments">
+        <header>Remessas<span *ngIf="!activeShipment"> - Nenhuma remessa selecionada</span></header>
+        <div class="shipments">
+            <span *ngFor="let shipment of shipments" (click)="onShipmentClick(shipment)"
+                class="shipment info clickable"
+                [class.selected]="shipment.id === activeShipment?.id">
+                {{shipment.date}} - {{shipment.status | shipmentStatus}}
             </span>
         </div>
+        <div *ngIf="shipmentOrders" class="orders">
+            <span *ngIf="user?.admin" class="info order total">Total
+                <span class="badge">{{totalShipmentOrder}}</span>
+            </span>
+            <ng-container *ngIf="user?.admin">
+                <span *ngFor="let order of shipmentOrders" class="info order {{order.status}}" [title]="order._userName">{{order._userName | shortName}}
+                    <span class="badge clickable" (dblclick)="changeOrderStatus(order)">{{order.amount}}</span>
+                </span>
+            </ng-container>
+            <ng-container *ngIf="!user?.admin">
+                <ng-container *ngFor="let order of shipmentOrders">
+                    <span *ngIf="order.uid === user.uid" class="info">{{order.amount}} pacote{{order.amount === 1 ? '' : 's'}}</span>
+                </ng-container>
+            </ng-container>
+        </div>
     </section>
 
+    <section *ngIf="user && activeShipment?.status === 'OPEN'" class="card order-amount">
+        <header>Pedido</header>
+        <div id="order-selection">
+            <div (click)="onOrderClick(0)" class="clickable" [class.selected]="orderAmount == 0"
+                title="Não vou querer dessa vez">
+                <img src="assets/no-thanks.jpeg" alt="Não vou querer dessa vez" class="qtd0">
+                <footer>Zero</footer>
+            </div>
+            <div (click)="onOrderClick(1)" class="clickable" [class.selected]="orderAmount == 1">
+                <img src="assets/1.jpg" title="Quero um pacote" alt="Quero um pacote" class="qtd1">
+                <footer>Um Pacote</footer>
+            </div>
+            <div (click)="onOrderClick(2)" class="clickable" [class.selected]="orderAmount == 2">
+                <img src="assets/2.jpg" title="Quero dois pacotes" alt="Quero dois pacotes" class="qtd2">
+                <footer>Dois Pacotes</footer>
+            </div>
+            <div *ngIf="itemRecemSelecionado" (click)="itemRecemSelecionado = false" class="message">Pedido selecionado com sucesso. Fique livre para mudar sua
+                opção a qualquer momento até o fechamento da remessa. Normalmente, nas sextas-feiras que antecedem a
+                entrega a remessa é fechada.</div>
+        </div>
+    </section>
 </main>
 <footer class="main">
     <small>&copy; 2019 Marcosoft, Inc.</small>

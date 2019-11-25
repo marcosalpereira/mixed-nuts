@@ -1,28 +1,19 @@
-.bg {
-    position: fixed;
-    top: 2.5rem;
-    left: calc(50vw - 26.78rem / 2);
-    height: 100vh;
-
-    box-sizing: border-box;
-    min-width: 26.78rem;
-    width: 26.78rem;
-    background-image: url("src/assets/nuts.jpeg");
-    background-repeat: no-repeat;
-    background-size: 100%;
-    opacity: 0.15;
-}
-
 header.main, main, footer.main {
-    width: calc(26.78rem - 2px);
     border: 1px solid navy;
     margin: 0 auto;
+    max-width: 1200px;
 }
 
-header.main {
+header.main .app-title {
+    background-color: #fff;
+    font-size: 70%;
+    padding-left: 5px;
+}
+
+header.main .user-container {
+    height: 2.5rem;
     background-color: navy;
     color: white;
-    height: 2.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -30,9 +21,8 @@ header.main {
 }
 
 header.main .user {
-    margin-left: 5px;
+    padding-left: 5px;
 }
-
 
 header.main .photo {
     position: relative;
@@ -55,37 +45,67 @@ header.main .photo footer {
     font-size: 0.6rem;
 }
 
-main {
+.card {
+    box-shadow: 2px 2px 4px #242121a2;
+    margin: 5px;
+    padding: 10px;
+}
+
+.card header {
+    padding-right: 5px;
+    text-align: left;
+    border-bottom: 1px solid lightgrey;
+    font-size: 70%;
+}
+
+main section.shipments div.shipments .shipment.selected {
+    border: 3px solid navy;
+    border-radius: 5px;
+}
+
+
+main section.shipments {
     text-align: center;
 }
 
-main p {
-    cursor: default;
-    margin: 10px 5px;
-    padding: 5px;
-    display: block;
-    box-shadow: 2px 2px 4px #242121a2;
+section.order-amount #order-selection .selected {
+    border: 3px solid navy;
+    border-radius: 5px;
 }
 
-main p.info {
-    font-size: 90%;
-    font-style: italic;
-    opacity: 0.9;
+.order.DELIVERED .badge{
+    background-color: orange
 }
 
-main p.previsao {
-    font-weight: bold;
+.order.PAID .badge{
+    background-color: green;
 }
 
-.order-amount img {
+main section.shipments .info.total {
+    background-color: lightgrey;
+    padding-right: 60px;
+}
+
+main section.shipments .order {
+    position: relative;
+    padding-right: 40px;
+    font-size: 120%;
+}
+
+
+#order-selection {
+    text-align: center;
+}
+
+section.order-amount img {
     height: 6rem;
     width: 6rem;
 }
 
-.order-amount div {
+section.order-amount #order-selection div {
     padding: 5px;
     background-color: transparent;
-    margin: 0 5px;
+    margin: 5px;
     display: inline-block;
     position: relative;
     cursor: pointer;
@@ -95,13 +115,23 @@ main p.previsao {
     border: 3px solid transparent;
 }
 
-.order-amount div.disabled {
+section.order-amount div.disabled {
     cursor: not-allowed;
 }
 
-.order-amount .selected {
+section.order-amount .selected {
     border: 3px solid navy;
     border-radius: 5px;
+}
+
+.info {
+    display: inline-block;
+    padding: 5px 5px 5px 5px;
+    border-radius: 5px;
+    box-shadow: 2px 2px 4px #242121a2;
+    margin: 2px 2px;
+    text-align: left;
+    font-size: 70%;
 }
 
 .badge {
@@ -118,25 +148,6 @@ main p.previsao {
     font-size: 90%;
 }
 
-.history p {
-    margin-bottom: 5px;
-}
-
-.history {
-    padding-bottom: 5px;
-}
-
-.history .order {
-    display: inline-block;
-    padding: 5px 40px 5px 5px;
-    position: relative;
-    border-radius: 5px;
-    box-shadow: 2px 2px 4px #242121a2;
-    margin: 0 2px;
-    white-space: nowrap;
-    text-align: left;
-}
-
 footer.main {
     background-color: navy;
     color: white;
@@ -151,4 +162,3 @@ footer.main * {
     font-size: 16px;
     line-height: 16px;
 }
-

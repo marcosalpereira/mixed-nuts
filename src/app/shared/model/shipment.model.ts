@@ -1,7 +1,13 @@
 import { Order } from './order.model';
 
+export enum ShipmentStatus {
+    OPEN = 'OPEN',
+    BUYING = 'BUYING',
+    CLOSED = 'CLOSED'
+}
+
 export interface Shipment {
-    uid: string;
+    id: string;
     date: string;
-    open: boolean;
+    status: ShipmentStatus;
 }
