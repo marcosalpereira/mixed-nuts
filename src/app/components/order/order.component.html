@@ -36,7 +36,7 @@
             </span>
             <ng-container *ngIf="user?.admin">
                 <span *ngFor="let order of shipmentOrders" class="info order {{order.status}}" [title]="order._userName">{{order._userName | shortName}}
-                    <span class="badge clickable" (dblclick)="changeOrderStatus(order)">{{order.amount}}</span>
+                    <button class="badge" (dblclick)="changeOrderStatus(order)">{{order.amount}}</button>
                 </span>
             </ng-container>
             <ng-container *ngIf="!user?.admin">
