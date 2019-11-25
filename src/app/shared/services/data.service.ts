@@ -79,6 +79,34 @@ export class DataService implements OnDestroy {
       );
   }
 
+  migrate() {
+    let orderId = 0;
+    this.fireStore.collection<User>('users').valueChanges().subscribe(
+      users => {
+        users.forEach(user => {
+          this.fireStore.collection<Order>(`users/${user.uid}/orders`).valueChanges().subscribe(
+            orders => {
+              orders.forEach(order => {
+                this.fireStore.doc(`remessas/${order.shipmentUid}`).set({
+                  id: order.shipmentUid,
+                  date: order.shipmentDate,
+                  status: 'CLOSED'
+                }, { merge: true }).then( () => {
+                  this.fireStore.doc(`remessas/${order.shipmentUid}/orders/${++orderId}`).set({
+                    uid: user.uid,
+                    amount: order.amount,
+                    status: 'PAID',
+                    _userName: user.displayName
+                  }, { merge: true });
+                });
+              });
+            }
+          );
+        });
+      }
+    );
+  }
+
 
   googleAuth(): void {
     this.authLogin(new auth.GoogleAuthProvider());

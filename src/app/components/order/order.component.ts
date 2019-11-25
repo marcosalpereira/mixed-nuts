@@ -123,4 +123,8 @@ export class OrderComponent implements OnInit, OnDestroy {
   logout() {
     this.dataService.loggout();
   }
+
+  migrate() {
+    this.dataService.migrate();
+  }
 }
