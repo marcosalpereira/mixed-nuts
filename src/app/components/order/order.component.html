@@ -22,7 +22,7 @@
 <main>
 
     <section class="card shipments">
-        <header>Remessas</header>
+        <header>Remessas<span *ngIf="!activeShipment"> - Nenhuma remessa selecionada</span></header>
         <div class="shipments">
             <span *ngFor="let shipment of shipments" (click)="onShipmentClick(shipment)"
                 class="shipment info clickable"
@@ -40,7 +40,9 @@
                 </span>
             </ng-container>
             <ng-container *ngIf="!user?.admin">
-                <span *ngFor="let order of shipmentOrders">{{order.amount}} pacotes</span>
+                <ng-container *ngFor="let order of shipmentOrders">
+                    <span *ngIf="order.uid === user.uid" class="info">{{order.amount}} pacote{{order.amount === 1 ? '' : 's'}}</span>
+                </ng-container>
             </ng-container>
         </div>
     </section>
@@ -61,7 +63,7 @@
                 <img src="assets/2.jpg" title="Quero dois pacotes" alt="Quero dois pacotes" class="qtd2">
                 <footer>Dois Pacotes</footer>
             </div>
-            <div *ngIf="itemRecemSelecionado" class="message">Pedido selecionado com sucesso. Fique livre para mudar sua
+            <div  class="message">Pedido selecionado com sucesso. Fique livre para mudar sua
                 opção a qualquer momento até o fechamento da remessa. Normalmente, nas sextas-feiras que antecedem a
                 entrega a remessa é fechada.</div>
         </div>

@@ -71,9 +71,12 @@ export class OrderComponent implements OnInit, OnDestroy {
         .subscribe(orders => {
           this.shipmentOrders = orders;
           this.totalShipmentOrder = 0;
-          orders.forEach(order => this.totalShipmentOrder += order.amount);
-          this.orderAmount = orders.find(order => order.uid === this.user.uid).amount || 0;
-
+          this.orderAmount = 0;
+          if (orders) {
+            orders.forEach(order => this.totalShipmentOrder += order.amount);
+            const userOrder = orders.find(order => order.uid === this.user.uid);
+            this.orderAmount = userOrder ? userOrder.amount : 0;
+          }
         }
       );
     }

@@ -103,7 +103,7 @@ section.order-amount img {
 section.order-amount #order-selection div {
     padding: 5px;
     background-color: transparent;
-    margin: 0 5px;
+    margin: 5px;
     display: inline-block;
     position: relative;
     cursor: pointer;
