@@ -56,11 +56,11 @@
                 <footer>Zero</footer>
             </div>
             <div (click)="onOrderClick(1)" class="clickable" [class.selected]="orderAmount == 1">
-                <img src="assets/1.jpg" title="Quero um pacote" alt="Quero um pacote" class="qtd1">
+                <img src="assets/nuts-1.jpeg" title="Quero um pacote" alt="Quero um pacote" class="qtd1">
                 <footer>Um Pacote</footer>
             </div>
             <div (click)="onOrderClick(2)" class="clickable" [class.selected]="orderAmount == 2">
-                <img src="assets/2.jpg" title="Quero dois pacotes" alt="Quero dois pacotes" class="qtd2">
+                <img src="assets/nuts-2.jpeg" title="Quero dois pacotes" alt="Quero dois pacotes" class="qtd2">
                 <footer>Dois Pacotes</footer>
             </div>
             <div *ngIf="itemRecemSelecionado" (click)="itemRecemSelecionado = false" class="message">Pedido selecionado com sucesso. Fique livre para mudar sua
