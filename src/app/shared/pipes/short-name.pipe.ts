@@ -5,7 +5,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class ShortNamePipe implements PipeTransform {
 
-  transform(value: string): string {
+  transform(value: string, disabled: boolean): string {
+    if (disabled) {
+      return value;
+    }
     const a = value.split(' ');
     if (a.length > 1) {
       return a[0] + ' ' + a[a.length - 1];

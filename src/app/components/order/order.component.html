@@ -31,13 +31,18 @@
             </span>
         </div>
         <div *ngIf="shipmentOrders" class="orders">
-            <span *ngIf="user?.admin" class="info order total">Total
+            <span *ngIf="user?.admin"
+                    (click)="disableShortName = !disableShortName"
+                    class="info order total clickable">Total
                 <span class="badge">{{totalShipmentOrder}}</span>
             </span>
             <ng-container *ngIf="user?.admin">
-                <span *ngFor="let order of shipmentOrders" class="info order {{order.status}}" [title]="order._userName">{{order._userName | shortName}}
-                    <button class="badge" (dblclick)="changeOrderStatus(order)">{{order.amount}}</button>
-                </span>
+                <ng-container *ngFor="let order of shipmentOrders">
+                    <span *ngIf="order.amount" class="info order {{order.status}}"
+                        [title]="order._userName">{{order._userName | shortName : disableShortName}}
+                        <button class="badge clickable" (dblclick)="changeOrderStatus(order)">{{order.amount}}</button>
+                    </span>
+                </ng-container>
             </ng-container>
             <ng-container *ngIf="!user?.admin">
                 <ng-container *ngFor="let order of shipmentOrders">

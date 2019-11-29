@@ -25,6 +25,8 @@ export class OrderComponent implements OnInit, OnDestroy {
   shipmentOrdersSub: Subscription;
   itemRecemSelecionado = false;
 
+  disableShortName = false;
+
   constructor(private dataService: DataService) { }
 
   ngOnInit() {
