@@ -2,8 +2,9 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { User } from 'src/app/shared/model/user';
 import { Subscription } from 'rxjs';
 import { DataService } from 'src/app/shared/services/data.service';
-import { Shipment } from 'src/app/shared/model/shipment.model';
+import { Shipment, ShipmentStatus } from 'src/app/shared/model/shipment.model';
 import { Order, OrderStatus } from 'src/app/shared/model/order.model';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-order',
@@ -11,7 +12,7 @@ import { Order, OrderStatus } from 'src/app/shared/model/order.model';
   styleUrls: ['./order.component.css']
 })
 export class OrderComponent implements OnInit, OnDestroy {
-  appTitle = 'Mixed Nuts Ordering System';
+  appTitle = `Mixed Nuts Ordering System - v${environment.version}`;
   user: User;
   orderAmount = 0;
   authDataSub: Subscription;
@@ -53,14 +54,32 @@ export class OrderComponent implements OnInit, OnDestroy {
       .shipments$()
       .subscribe(shipments => {
         this.shipments = shipments;
-        this.selectShipment(shipments.find(shipment =>
-          shipment.status === 'OPEN' ||
-          shipment.status === 'BUYING'));
+        this.selectShipment(this.findShipmentToSelect(shipments));
       });
+  }
+
+  private findShipmentToSelect(shipments: Shipment[]): Shipment {
+    const notClosedShipment = shipments.find(
+      shipment => shipment.status === 'OPEN' ||
+      shipment.status === 'BUYING');
+    if (notClosedShipment) {return notClosedShipment; }
+    return shipments && shipments[shipments.length - 1];
   }
 
   onShipmentClick(shipment: Shipment) {
     this.selectShipment(shipment);
+  }
+
+  onShipmentDblclick(shipment: Shipment) {
+    if (!this.user.admin) { return; }
+    if (shipment.status === ShipmentStatus.OPEN) {
+      shipment.status = ShipmentStatus.BUYING;
+    } else if  (shipment.status === ShipmentStatus.BUYING) {
+      shipment.status = ShipmentStatus.CLOSED;
+    } else {
+      shipment.status = ShipmentStatus.OPEN;
+    }
+    this.dataService.updateShipmentStatus(shipment.id, shipment.status);
   }
 
   private selectShipment(shipment: Shipment) {

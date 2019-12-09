@@ -1,6 +1,6 @@
 import { map, flatMap, mergeMap } from 'rxjs/operators';
 import { User } from './../model/user';
-import { Shipment } from 'src/app/shared/model/shipment.model';
+import { Shipment, ShipmentStatus } from 'src/app/shared/model/shipment.model';
 import { Injectable, OnDestroy } from '@angular/core';
 import { auth } from 'firebase/app';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -111,6 +111,13 @@ export class DataService implements OnDestroy {
   updateOrderStatus(uid: string, shipmentId: string, status: OrderStatus) {
     const ref: AngularFirestoreDocument<any> = this.fireStore.doc(
       `remessas/${shipmentId}/orders/${uid}`
+    );
+    ref.set({status}, { merge: true });
+  }
+
+  updateShipmentStatus(shipmentId: string, status: ShipmentStatus) {
+    const ref: AngularFirestoreDocument<any> = this.fireStore.doc(
+      `remessas/${shipmentId}`
     );
     ref.set({status}, { merge: true });
   }

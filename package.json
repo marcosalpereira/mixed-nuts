@@ -1,14 +1,16 @@
 {
   "name": "mixed-nuts",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "prebuild": "node scripts/prebuild.js src/environments/environment.ts",
     "build": "ng build",
+    "build:prod": "ng build --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "deploy": "ng build --prod && firebase deploy"
+    "deploy": "node scripts/prebuild.js src/environments/environment.prod.ts && npm run build:prod && firebase deploy"
   },
   "private": true,
   "dependencies": {

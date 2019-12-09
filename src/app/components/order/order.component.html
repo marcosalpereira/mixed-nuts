@@ -24,7 +24,7 @@
     <section class="card shipments">
         <header>Remessas<span *ngIf="!activeShipment"> - Nenhuma remessa selecionada</span></header>
         <div class="shipments">
-            <span *ngFor="let shipment of shipments" (click)="onShipmentClick(shipment)"
+            <span *ngFor="let shipment of shipments" (click)="onShipmentClick(shipment)" (dblclick)="onShipmentDblclick(shipment)"
                 class="shipment info clickable"
                 [class.selected]="shipment.id === activeShipment?.id">
                 {{shipment.date}} - {{shipment.status | shipmentStatus}}
